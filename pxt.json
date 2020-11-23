@@ -7,9 +7,9 @@
         "microphone": "*"
     },
     "files": [
-        "main.blocks",
         "main.ts",
-        "README.md"
+        "README.md",
+        "tutorial.md"
     ],
     "testFiles": [
         "test.ts"
@@ -17,5 +17,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
