@@ -1,7 +1,7 @@
 ### @flyoutOnly
 ### @explicitHints
 
-# Spille på flaskene frla lysest til mørkest tone
+# Spille på flaskene fra mørkeste til lyseste tone
 
 
 ## Steg 1
@@ -15,7 +15,7 @@ radio.setGroup(4)```
 
 Nå skal vi spille på flaskene i riktig rekkefølge. Bruk blokken``[radio.sendValue("name", 0)]`` der name = spill. 
 
-Send en blokk per flaske og sett verdien til å være den flasken du vil spille på. 
+Send én blokk per flaske, og sett verdien til å være nummeret til flasken du vil spille på. 
 
 Sett blokkene inni en ``[input.onButtonPressed(Button.A, function ()]``
 
