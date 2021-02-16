@@ -22,10 +22,10 @@ Sett blokkene inni en ``||input: Når knapp A trykkes||``.
 
 ```blocks
 input.onButtonPressed(Button.A, function () {
-    radio.sendValue("spill", 0)
-    radio.sendValue("spill", 0)
-    radio.sendValue("spill", 0)
-    radio.sendValue("spill", 0)
+    radio.sendValue("spill", )
+    radio.sendValue("spill", )
+    radio.sendValue("spill", )
+    radio.sendValue("spill", )
 })
 ```
 
