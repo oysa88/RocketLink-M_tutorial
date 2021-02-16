@@ -2,7 +2,7 @@
 ### @explicitHints
 
 # Spille på flaskene fra mørkeste til lyseste tone
-
+Du skal forsøke å spille på flaskene fra den mørkeste til den lyseste tonen. Følg instruksjonen under!
 
 ## Steg 1
 
