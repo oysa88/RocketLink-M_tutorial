@@ -8,8 +8,9 @@ Du skal forsøke å spille på flaskene fra den mørkeste til den lyseste tonen.
 
 Sett opp egen ``||radio:Radio sett gruppe||``. Den skal være den samme som posten du er på.
 
-```block
-radio.setGroup(4)```
+```blocks
+radio.setGroup(4)
+```
 
 ## Steg 2
 
@@ -21,11 +22,12 @@ Sett blokkene inni en ``||input: Når knapp A trykkes||``.
 
 ```blocks
 input.onButtonPressed(Button.A, function () {
-    radio.sendValue("spill", )
-    radio.sendValue("spill", )
-    radio.sendValue("spill", )
-    radio.sendValue("spill", )
-})```
+    radio.sendValue("spill", 0)
+    radio.sendValue("spill", 0)
+    radio.sendValue("spill", 0)
+    radio.sendValue("spill", 0)
+})
+```
 
 
 ## Steg 3
