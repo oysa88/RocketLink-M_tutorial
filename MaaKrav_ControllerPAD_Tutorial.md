@@ -3,7 +3,7 @@
 
 ## Del 1: Radiokanal
 
-Sett opp en egen radiokanal (``||radio: radio sett gruppe||``) så koffertene kan snakke sammen. 
+Sett opp en egen radiokanal (``||radio: radio sett gruppe||``) så koffertene kan snakke sammen. Bruk samme radiokanal som du satte opp på LaunchPAD.
 
 ```blocks
 radio.setGroup(1)
@@ -84,7 +84,7 @@ basic.forever(function () {
 
 ## Del 7: 
 
-Last ned koden på en micro:bit og test om den funker på RocketLink-M Controller Pad!
+Last ned koden på en micro:bit og test om den funker på RocketLink-M ControllerPAD!
 
 Lykke til!
 
