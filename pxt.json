@@ -12,7 +12,8 @@
         "README.md",
         "tutorial.md",
         "_locales/nb-NO/tutorial.md",
-        "LinkstatusRocketLink_Tutorial.md"
+        "LinkstatusRocketLink_Tutorial.md",
+        "MaaKrav_ControllerPAD_Tutorial.md"
     ],
     "testFiles": [
         "test.ts"

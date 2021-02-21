@@ -1,3 +1,6 @@
+!### @flyoutOnly
+!### @explicitHints
+
 # Sjekke Linkstatus til rakettkoffertene
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
@@ -37,7 +40,7 @@ Vi skal sjekke om ``||input: kjøretid (ms)||`` minus (-) ``||variabel: lastSeen
 
 Hvis dette er sant, skal ``||variabel: LinkCheck||`` settes til ``||logic: usann||``
 
-Avslutt med å med en ``||basic: pause||`` lik ``||variabel: updateFrequency||``.
+Avslutt med en ``||basic: pause||`` lik ``||variabel: updateFrequency||``.
 
 
 ```blocks
