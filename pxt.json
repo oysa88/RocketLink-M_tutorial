@@ -1,5 +1,5 @@
 {
-    "name": "Flaskespilling",
+    "name": "RocketLink-M Tuorials",
     "version": "1.0.0",
     "description": "",
     "dependencies": {
@@ -11,7 +11,8 @@
         "main.ts",
         "README.md",
         "tutorial.md",
-        "_locales/nb-NO/tutorial.md"
+        "_locales/nb-NO/tutorial.md",
+        "LinkstatusRocketLink_Tutorial.md"
     ],
     "testFiles": [
         "test.ts"
