@@ -153,12 +153,12 @@ function StatusCheck () {
 
 Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelvStatus||`` er ``||logic: sann||``.
 
-Lag en ``||logic: Hvis-betingelse||`` som skal lese av ``||pins: P1||``. Hvis ``||pins: P1||`` er lik 1, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Hvis ikke, skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
+Lag en ``||logic: Hvis-betingelse||`` som skal lese av ``||pins: P1||``. Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Hvis ikke, skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
 
 ```blocks
 function StatusCheck () {
 	SelvStatus = true
-    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
         ArmStatus = true
     } else {
         ArmStatus = false
@@ -168,7 +168,7 @@ function StatusCheck () {
 
 ## Del 3.2
 
-Vi er ikke ferdig med ``||functions: StatusCheck||``, men vi må fikse et par ting før vi kommer tilbake hit.
+Vi er ikke ferdig med ``||functions: StatusCheck||``. Vi må fikse et par ting før vi kommer tilbake hit.
 
 
 ## Del 4: Sjekke Linkstatus til rakettkoffertene
@@ -192,7 +192,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ## Del 4.2: Lage en oppdateringsfrekvens
 
-Lag en variabel som du kaller ``||variable: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``
+Lag en variabel som du kaller ``||variable: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
 
 ```blocks
 let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
@@ -233,7 +233,54 @@ control.inBackground(function () {
 
 ## Del 5: Motta statusoppdatering fra LaunchPAD-kofferten
 
+Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` og ``||variabel: ArmStatusLP||``. Disse to sjekker om igniterne er koblet ordentlig til raketten, og om Arm-knappen på LaunchPAD-kofferten er skrudd på.
 
+Vi må lage to ``||logic: Hvis-betingelse||`` som skal sjekket hver sin status. 
+
+Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers er den ``||logic: usann||``.
+
+Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||logic: sann||``. Ellers er den ``||logic: usann||``.
+
+```blocks
+radio.onReceivedNumber(function (receivedNumber) {
+    LinkStatus = true
+    sistSettAktiv = input.runningTime()
+    if (receivedNumber == 21) {
+        IgniterStatusLP = true
+    } else {
+        IgniterStatusLP = false
+    }
+    if (receivedNumber == 31) {
+        ArmStatusLP = true
+    } else {
+        ArmStatusLP = false
+    }
+})
+```
+
+## Del 6: Fullføre StatusCheck
+
+For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i funksjonen ``||functions: StatusCheck||``.
+
+Vi skal sjekke: ``||variable: SelvStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||``, ``||variable: IgniterStatusLP||`` og ``||variable: ArmStatusLP||``.
+
+Lag en ny variable: ``||variable: Klar||``. Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variable: Klar||`` settes lik ``||logic: sann||``. Eller lik ``||logic: usann||``. 
+
+```blocks
+function StatusCheck () {
+	SelvStatus = true
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        ArmStatus = true
+    } else {
+        ArmStatus = false
+    }
+    if (SelvStatus && LinkStatus && ArmStatus && IgniterStatusLP && ArmStatusLP) {
+        Klar = true
+    } else {
+        Klar = false	
+    }
+}
+```
 
 
 
