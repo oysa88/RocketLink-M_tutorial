@@ -6,7 +6,9 @@ I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal
 
 ## Del 1.1
 
-Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.)
+Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
+
+NB: Velg at man velger samme ``||radio: radiogruppe||`` på begge koffertene! 
 
 Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterkere radiosender.)
 
