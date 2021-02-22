@@ -332,7 +332,11 @@ function Launch () {
 
 ## Del 8.2: Launch-funksjon
 
-Når vi kobler opp
+Når vi har trykket på Launch-knappen og satt ``||pins: skriver digital pin P11 = 0||``, hopper vi inn i ``||functions: Launch||``.
+
+Launch-kommandoen inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variabel: Klar||`` er ``||logic: sann||``.
+
+Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp. Du må også sende en egen ``||radio: radio send tall||`` til LaunchPAD-kofferten, som den ikke kan misforstå. Til slutt skal ``||variabel: Klar||`` settes til ``||logic: usann||``.
 
 ```blocks
 function Launch () {
@@ -349,6 +353,92 @@ function Launch () {
     }
 }
 ```
+
+## Del 9.1: Rearm av kofferten
+
+Når vi har sendt opp rakketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen. 
+
+For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. 
+
+Start med å skru av lysene til NeoPixels. Så skal vi lage en ``||loops: while-løkke||`` som er aktiv så lange  ``||pins: digital pin P1 = 0||``.
+
+Inni denne ``||loops: while-løkke||`` skal vi gå skjermen på microbiten og Rearm LED (``||pins: P8||``) til å blinke. 
+
+```blocks
+let strip: neopixel.Strip = null
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        pins.digitalWritePin(DigitalPin.P8, 1)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+}
+```
+
+
+## Del 9.2
+
+Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
+
+Skru av ``||pins: P8||``, sett NeoPixels til ``||neopixel: Purple||`` og ``||basic: tøm skjermen||`` til microbiten.
+
+Avslutt med en ``||basic: pause||`` i 200 ms. før vi kaller opp funksjonen ``||functions: Initialize||`` for å restarte rakett-kofferten.
+
+```blocks
+let strip: neopixel.Strip = null
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        pins.digitalWritePin(DigitalPin.P8, 1)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(200)
+    Initialize()
+}
+function Initialize () {
+	
+}
+```
+
+
 
 
 ```package
