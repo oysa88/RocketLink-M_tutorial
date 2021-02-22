@@ -6,7 +6,7 @@ I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal
 
 ## Del 1.1
 
-Det første vi skal sette opp er en ``||radio: radiogruppe||``. Den skal være et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.)
+Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.)
 
 Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterkere radiosender.)
 
@@ -16,9 +16,9 @@ radio.setTransmitPower(7)
 ```
 ## Del 1.2
 
-Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels.
+Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
 
-Sett at digital pin (``||pins: P15||``) skal skrives til 1. 
+Sett at digital pin (``||pins: P15||``) skal skrives til 1. (Dette er lyset på Status Check-knappen på kofferten.)
 
 ```blocks
 let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
@@ -29,7 +29,7 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 ## Del 2: Initialize
 
-For å visualisere oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
+For å kjøre oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
 
 Det er flere steder i koden vår vi skal kalle opp ``||functions: Initialize||``. Den første er i ``||basic: ved start||``.
 
@@ -44,11 +44,11 @@ function Initialize () {
 }
 ```
 
-## Del 2.1
+## Del 2.1: Initialize function
 
-Det første vi må gjøre her er å lage 4 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 4 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
-SelfStatus sjekker om kofferten er på, LinkStatus sjekker om det er kontakt med den andre kofferten, ArmStatus sjekker om Arm-knappen er skrudd på, og Ready sjekker om alle systemene på kofferten er på.
+``||variable: SelfStatus||`` sjekker om kofferten er på, ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten, ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på, og ``||variable: Klar||`` sjekker om alle systemene på kofferten er på.
 
 Sett alle disse 4 variablene til er være ``||logic: usann||``
 
@@ -67,7 +67,7 @@ function Initialize () {
 
 ## Del 2.2
 
-Vi skal teste lysene på NeoPixel strip, hvor vi skal sette alle lysene til å lyse lilla (``||neopixel: Purple||``).
+Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -136,9 +136,9 @@ function Initialize () {
 
 ## Del 3: StatusCheck
 
-For at systemet vårt skal hele tiden sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
+For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
 
-Denne funskjonen skal kalles opp fra en ``||basic: gjenta for alltid||``.
+Denne funksjonen skal kalles opp fra en ``||basic: gjenta for alltid||``.
 
 ```blocks
 basic.forever(function () {
@@ -151,9 +151,9 @@ function StatusCheck () {
 
 ## Del 3.1
 
-Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``.
+Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
-Lag en ``||logic: Hvis-betingelse||`` som skal lese av ``||pins: P1||``. Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Hvis ikke, skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
+Videre, lag en ``||logic: Hvis-betingelse||`` som skal lese av ``||pins: P1||`` (Arm-knappen). Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
 
 ```blocks
 function StatusCheck () {
@@ -174,14 +174,17 @@ Vi er ikke ferdig med ``||functions: StatusCheck||``. Vi må fikse et par ting f
 ## Del 4: Sjekke Linkstatus til rakettkoffertene
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
-Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sier «Hei, jeg er ikke avskrudd». 
+
+Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sier «Hei, jeg er ikke avskrudd». Men vi trenger noe som sier ifra hvis det har gått for lang tid siden sist vi fikk en radiomelding fra den andre kofferten.
 
 
 ## Del 4.1: Sjekke at man mottar signal fra den andre kofferten
 
 Lag to variabler: ``||variable: LinkStatus||`` og ``||variable: sistSettAktiv||``. 
 
-Inni en ``||radio:når radio mottar receivedNumber||``: Sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og sett ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``.
+Inni en ``||radio:når radio mottar receivedNumber||``: Sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og sett ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
+
+I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variable: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variable: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
@@ -204,11 +207,11 @@ let opppdateringsfrekvens = 200
 
 ## Del 4.3: Sjekke om man slutter å motta signal fra den andre kofferten 
 
-For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||controll: run in Background||``. (Finner du i menuen: Kontroll)
+For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||controll: run in Background||``. (Finner du i menuen: Styring)
 
-Inni her skal lage en  ``||loops: while-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
+Inni her skal vi lage en  ``||loops: while-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
 
-Send tallet 10 med radio. 
+Inni ``||loops: while-løkken||`` skal vi send tallet 10 med radio. 
 
 Nå skal vi sjekke om den ene av koffertene ikke mottar et signal på 3x ``||variabel: oppdateringsfrekvens||``. Hvis den er lengre enn det, kan den regne med at den andre kofferten er skrudd av.
 
@@ -233,9 +236,9 @@ control.inBackground(function () {
 
 ## Del 5: Motta statusoppdatering fra LaunchPAD-kofferten
 
-Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` og ``||variabel: ArmStatusLP||``. Disse to sjekker om igniterne er koblet ordentlig til raketten, og om Arm-knappen på LaunchPAD-kofferten er skrudd på.
+Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` og ``||variabel: ArmStatusLP||``. (Lag disse to variablene.) Disse to sjekker om igniterne er koblet ordentlig til raketten, og om Arm-knappen på LaunchPAD-kofferten er skrudd på.
 
-Vi må lage to ``||logic: Hvis-betingelse||`` som skal sjekket hver sin status. 
+Vi må lage to ``||logic: Hvis-betingelse||`` som skal sjekket hver av disse statusene. 
 
 Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers er den ``||logic: usann||``.
 
@@ -264,7 +267,7 @@ For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||log
 
 Vi skal sjekke: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||``, ``||variable: IgniterStatusLP||`` og ``||variable: ArmStatusLP||``.
 
-Lag en ny variable: ``||variable: Klar||``. Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variable: Klar||`` settes lik ``||logic: sann||``. Eller lik ``||logic: usann||``. 
+Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variable: Klar||`` settes lik ``||logic: sann||``. Eller lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variabel: Klar||`` er ``||logic: sann||`` eller ikke.
 
 ```blocks
 function StatusCheck () {
@@ -276,8 +279,22 @@ function StatusCheck () {
     }
     if (SelvStatus && LinkStatus && ArmStatus && IgniterStatusLP && ArmStatusLP) {
         Klar = true
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
     } else {
-        Klar = false	
+        Klar = false
+        basic.showLeds(`
+            # . . . #
+            # # . # #
+            # . # . #
+            # . . . #
+            # . . . #
+            `)	
     }
 }
 ```
@@ -336,7 +353,7 @@ Når vi har trykket på Launch-knappen og satt ``||pins: skriver digital pin P11
 
 Launch-kommandoen inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variabel: Klar||`` er ``||logic: sann||``.
 
-Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp. Du må også sende en egen ``||radio: radio send tall||`` til LaunchPAD-kofferten, som den ikke kan misforstå. Til slutt skal ``||variabel: Klar||`` settes til ``||logic: usann||``.
+Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp. Du må også sende en egen ``||radio: radio send tall||`` til LaunchPAD-kofferten. Vel et tall som ikke kan misforstås. Til slutt skal ``||variabel: Klar||`` settes til ``||logic: usann||``.
 
 ```blocks
 function Launch () {
@@ -356,13 +373,13 @@ function Launch () {
 
 ## Del 9.1: Rearm av kofferten
 
-Når vi har sendt opp rakketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen. 
+Når vi har sendt opp raketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen, og systemet er resatt. 
 
-For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. 
+For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. Den skal kalles opp fra bunnen i ``||functions: Launch||``).
 
 Start med å skru av lysene til NeoPixels. Så skal vi lage en ``||loops: while-løkke||`` som er aktiv så lange  ``||pins: digital pin P1 = 0||``.
 
-Inni denne ``||loops: while-løkke||`` skal vi gå skjermen på microbiten og Rearm LED (``||pins: P8||``) til å blinke. 
+Inni denne ``||loops: while-løkke||`` skal vi få skjermen på microbiten og Rearm LED til å blinke ved å stru ``||pins: P8||`` av og på.
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -386,6 +403,20 @@ function Rearm () {
             . # # # .
             . . . . .
             `)
+    }
+}
+function Launch () {
+    if (Klar) {
+	    basic.showLeds(`
+        . . # . .
+        . # # # .
+        # . # . #
+        . . # . .
+        . . # . .
+        `)
+        radio.sendNumber(42)
+        Klar = false
+        Rearm()
     }
 }
 ```
@@ -437,7 +468,50 @@ function Initialize () {
 	
 }
 ```
+## Del 10: Sette NeoPixelColors
 
+For å benytte oss av NeoPixelene for å vise om hvert av systemene er på eller av, må vi lage en ny funksjon: ``||functions: NeoPixels||``. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||`` 
+
+I denne skal vi inidividuelt sjekke om opp variablene: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatusLP||``, ``||variable: ArmStatusLP||`` og ``||variable: Klar||``.
+
+Hvis variabelen er ``||logic: sann||``, skal Neopixel settes til grønn, eller skal den være rød.
+
+Avslutt med å vise lysene: ``||neopixel: show||``
+
+```blocks
+let strip: neopixel.Strip = null
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (IgniterStatusLP) {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatusLP) {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (Klar) {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
+    }
+    strip.show()
+{
+function StatusCheck () {
+	NeoPixels()
+}
+```
 
 
 
