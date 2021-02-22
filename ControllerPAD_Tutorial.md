@@ -180,7 +180,7 @@ Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sie
 
 ## Del 4.1: Sjekke at man mottar signal fra den andre kofferten
 
-Lag to variabler: ``||variable: LinkStatus||`` og ``||variable: sistSettAktiv||``. 
+Lag en ny variabel: ``||variable: sistSettAktiv||``. 
 
 Inni en ``||radio:når radio mottar receivedNumber||``: Sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og sett ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
 
