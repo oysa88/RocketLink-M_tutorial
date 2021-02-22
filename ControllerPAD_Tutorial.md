@@ -303,13 +303,52 @@ function StatusCheck () {
 	
 }
 ```
-## Del 8: Launch-funksjonen
+## Del 8.1: Launch-funksjonen
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
-I ``||basic: gjenta for alltid||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at vi skal kalle opp funksjonen ``||functions: Launch||`` når vi ``||pins: skriver digital pin P11 = 0||``. 
+I ``||basic: gjenta for alltid||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at vi skal kalle opp funksjonen ``||functions: Launch||`` hvis ``||pins: skriver digital pin P11 = 0||``. 
 
-Inne i 
+```blocks
+let strip: neopixel.Strip = null
+basic.forever(function () {
+    StatusCheck()
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        basic.pause(100)
+        StatusCheck()
+    }
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
+})
+function StatusCheck () {
+	
+}
+function Launch () {
+	
+}
+```
+
+## Del 8.2: Launch-funksjon
+
+Når vi kobler opp
+
+```blocks
+function Launch () {
+    if (Klar) {
+	    basic.showLeds(`
+        . . # . .
+        . # # # .
+        # . # . #
+        . . # . .
+        . . # . .
+        `)
+        radio.sendNumber(42)
+        Klar = false
+    }
+}
+```
 
 
 ```package
