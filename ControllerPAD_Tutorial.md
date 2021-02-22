@@ -507,12 +507,85 @@ function NeoPixels () {
         strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
     }
     strip.show()
-{
+}
 function StatusCheck () {
-	NeoPixels()
+    NeoPixels()
 }
 ```
 
+
+## Del 11: Buzzer
+
+For å varsle at raketten skal skytes opp, skal en buzzer bli skrudd på når vi alle systemene er på og armerte.
+
+For å få til dette må vi lage en liten ``||logic: Hvis-betingelse||`` som sier at ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) skal skrus på (settes til 1) når variabelen ``||variabel: Klar||`` er ``||logic: sann||``. Eller skal de skrus av (settes til 0).
+
+```blocks
+let strip: neopixel.Strip = null
+basic.forever(function () {
+    StatusCheck()
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        basic.pause(100)
+        StatusCheck()
+    }
+    if (Klar) {
+        pins.digitalWritePin(DigitalPin.P13, 1)
+        pins.digitalWritePin(DigitalPin.P14, 1) 
+    } else {
+        pins.digitalWritePin(DigitalPin.P13, 0)
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
+})
+function StatusCheck () {
+	
+}
+```
+
+## Del 12: BuzzerBlink funksjon
+
+Etter at raketten er skutt opp, skal vi få ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) til å tute og blinke 3 ganger.
+
+Lag en ny funksjon: ``||functions: BuzzerBlink||``. Denne funksjonen skal kalles opp først inne i ``||functions: Launch||`` hvis ``||variabel: Klar||`` er ``||logic: sann||``.
+
+Sett ``||pins: P13||`` og ``||pins: P14||`` til høy (1) og lav (0) 3 ganger, med 100 ms ``||basic: pause||`` mellom hver høy og lav.
+
+```blocks
+function BuzzerBlink () {
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+}
+function Launch () {
+    if (Klar) {
+        BuzzerBlink()
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        radio.sendNumber(42)
+        Klar = false
+        Rearm()
+    }
+}
+```
 
 
 ```package
