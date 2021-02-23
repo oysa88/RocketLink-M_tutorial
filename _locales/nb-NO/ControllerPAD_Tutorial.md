@@ -1,14 +1,10 @@
 # ControllerPAD Tutorial del 1
 
-## Del 1: 
-
-### Ved start
+## Del 1: Ved start
 
 I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal settes i gang når kofferten skrus på.
 
 ## Del 1.1
-
-### Ved start - radio
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -21,8 +17,6 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 ```
 ## Del 1.2
-
-### Ved start - resten
 
 Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
 
@@ -602,5 +596,3 @@ function Rearm () {
 ```package
 neopixel=github:microsoft/pxt-neopixel#v0.7.3
 ```
-
-gulp testtutorials
