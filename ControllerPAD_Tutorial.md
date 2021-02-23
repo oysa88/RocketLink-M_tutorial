@@ -1,4 +1,4 @@
-# ControllerPAD Tutorial del 1
+# ControllerPAD Tutorial
 
 ## Del 1: Ved start
 
