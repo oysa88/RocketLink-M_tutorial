@@ -294,7 +294,7 @@ let oppdateringsfrekvens = 200
 
 ### Sjekke om den andre kofferten er skrudd av: 
 
-For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||controll: run in Background||``. (Finner du i menuen: Styring)
+For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||control: kjør i bakgrunnen||``. (Finner du i menuen: Styring)
 
 Inni her skal vi lage en  ``||loops: while-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
 
