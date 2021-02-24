@@ -17,8 +17,7 @@
         "MaaKrav_ControllerPAD_Tutorial.md",
         "MaaKrav_LaunchPAD_Tutorial.md",
         "ControllerPAD_Tutorial.md",
-        "LaunchPAD_Tutorial.md",
-        "_locales/nb-NO/ControllerPAD_Tutorial.md"
+        "LaunchPAD_Tutorial.md"
     ],
     "testFiles": [
         "test.ts"
