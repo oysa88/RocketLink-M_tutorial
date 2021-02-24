@@ -2,13 +2,9 @@
 
 ## Del 1: Ved start
 
-### Ved start
-
 I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal settes i gang når kofferten skrus på.
 
-## Del 1.1
-
-### Ved start - radio
+## Del 1.1: Ved start - radio
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -20,9 +16,7 @@ Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterker
 radio.setGroup(1)
 radio.setTransmitPower(7)
 ```
-## Del 1.2
-
-### Ved start - resten
+## Del 1.2: Ved start - resten
 
 Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
 
@@ -35,7 +29,7 @@ radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 ```
 
-## Del 2: Initialize
+## Del 2: Initialize oppsett 
 
 For å kjøre oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
 
@@ -52,7 +46,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.1: Initialize function
+## Del 2.1: Initialize funksjon
 
 Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 4 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
@@ -73,7 +67,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.2
+## Del 2.2: Initialize - NeoPixels
 
 Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
 
@@ -92,7 +86,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.3
+## Del 2.3: Initialize - animasjon
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
 
@@ -142,7 +136,7 @@ function Initialize () {
 }
 ```
 
-## Del 3: StatusCheck
+## Del 3: StatusCheck oppsett
 
 For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
 
@@ -157,7 +151,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.1
+## Del 3.1: StatusCheck - variabler
 
 Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
@@ -174,7 +168,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.2
+## Del 3.2: StatusCheck - "I`ll be back!"
 
 Vi er ikke ferdig med ``||functions: StatusCheck||``. Vi må fikse et par ting før vi kommer tilbake hit.
 
@@ -210,7 +204,7 @@ let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
 radio.setGroup(1)
 radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
-let opppdateringsfrekvens = 200
+let oppdateringsfrekvens = 200
 ```
 
 ## Del 4.3: Sjekke om man slutter å motta signal fra den andre kofferten 
@@ -248,9 +242,9 @@ Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` 
 
 Vi må lage to ``||logic: Hvis-betingelse||`` som skal sjekket hver av disse statusene. 
 
-Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers er den ``||logic: usann||``.
+Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 22||``, er ``||variabel: IgniterStatusLP||`` ``||logic: usann||``.
 
-Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||logic: sann||``. Ellers er den ``||logic: usann||``.
+Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 32||``, er ``||variabel: ArmStatusLP||`` ``||logic: usann||``.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
@@ -258,12 +252,12 @@ radio.onReceivedNumber(function (receivedNumber) {
     sistSettAktiv = input.runningTime()
     if (receivedNumber == 21) {
         IgniterStatusLP = true
-    } else {
+    } else if (receivedNumber == 22) {
         IgniterStatusLP = false
     }
     if (receivedNumber == 31) {
         ArmStatusLP = true
-    } else {
+    } else if (receivedNumber == 32) {
         ArmStatusLP = false
     }
 })
@@ -430,7 +424,7 @@ function Launch () {
 ```
 
 
-## Del 9.2
+## Del 9.2: Rearm-funksjonen etter rearmeringen
 
 Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
 
