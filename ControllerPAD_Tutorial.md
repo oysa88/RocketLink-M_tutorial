@@ -8,7 +8,7 @@ I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal
 
 ## Del 1.1: 
 
-Ved start - radio:
+### Ved start - radio:
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -22,7 +22,7 @@ radio.setTransmitPower(7)
 ```
 ## Del 1.2: 
 
-Ved start - resten
+### Ved start - resten
 
 Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
 
@@ -37,7 +37,7 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 ## Del 2: 
 
-Initialize oppsett: 
+### Initialize oppsett: 
 
 For å kjøre oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
 
@@ -56,7 +56,7 @@ function Initialize () {
 
 ## Del 2.1: 
 
-Initialize funksjon:
+### Initialize funksjon:
 
 Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 4 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
@@ -79,7 +79,7 @@ function Initialize () {
 
 ## Del 2.2: 
 
-Initialize - NeoPixels:
+### Initialize - NeoPixels:
 
 Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
 
@@ -100,7 +100,7 @@ function Initialize () {
 
 ## Del 2.3: 
 
-Initialize - animasjon:
+### Initialize - animasjon:
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
 
@@ -152,7 +152,7 @@ function Initialize () {
 
 ## Del 3: 
 
-StatusCheck oppsett:
+### StatusCheck oppsett:
 
 For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
 
@@ -169,7 +169,7 @@ function StatusCheck () {
 
 ## Del 3.1: 
 
-StatusCheck - variabler:
+### StatusCheck - variabler:
 
 Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
@@ -188,14 +188,14 @@ function StatusCheck () {
 
 ## Del 3.2: 
 
-StatusCheck - "I`ll be back!"
+### StatusCheck - "I`ll be back!"
 
 Vi er ikke ferdig med ``||functions: StatusCheck||``. Vi må fikse et par ting før vi kommer tilbake hit.
 
 
 ## Del 4: 
 
-Sjekke Linkstatus mellom rakettkoffertene:
+### Sjekke Linkstatus mellom rakettkoffertene:
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
 
@@ -204,7 +204,7 @@ Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sie
 
 ## Del 4.1: 
 
-Sjekke at man mottar signal fra den andre kofferten:
+### Sjekke om radio-kommunikasjon funker:
 
 Lag en ny variabel: ``||variable: sistSettAktiv||``. 
 
@@ -221,7 +221,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ## Del 4.2: 
 
-Lage en oppdateringsfrekvens:
+### Lage en oppdateringsfrekvens:
 
 Lag en variabel som du kaller ``||variable: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
 
@@ -235,7 +235,7 @@ let oppdateringsfrekvens = 200
 
 ## Del 4.3: 
 
-Sjekke om man slutter å motta signal fra den andre kofferten: 
+### Sjekke om den andre kofferten er skrudd av: 
 
 For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||control: run in Background||``. (Finner du i menuen: Styring)
 
@@ -266,7 +266,7 @@ control.inBackground(function () {
 
 ## Del 5: 
 
-Motta statusoppdatering fra LaunchPAD-kofferten:
+### Motta statusoppdatering fra LaunchPAD-kofferten:
 
 Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` og ``||variabel: ArmStatusLP||``. (Lag disse to variablene.) Disse to sjekker om igniterne er koblet ordentlig til raketten, og om Arm-knappen på LaunchPAD-kofferten er skrudd på.
 
@@ -295,7 +295,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ## Del 6: 
 
-Fullføre StatusCheck:
+### Fullføre StatusCheck:
 
 For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i funksjonen ``||functions: StatusCheck||``.
 
@@ -334,7 +334,7 @@ function StatusCheck () {
 ```
 ## Del 7: 
 
-Forever-løkken:
+### Forever-løkken:
 
 ``||basic: Gjenta for alltid||`` er den blokken som til en hver tid står og jobber, og sjekker opp statusen til systemet vårt. Vi skal nå gjøre den ferdig.
 
@@ -358,7 +358,7 @@ function StatusCheck () {
 ```
 ## Del 8.1: 
 
-Sette opp Launch-funksjon:
+### Sette opp Launch-funksjon:
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
@@ -387,7 +387,7 @@ function Launch () {
 
 ## Del 8.2: 
 
-Sende Launch-kommando:
+### Sende Launch-kommando:
 
 Når vi har trykket på Launch-knappen og satt ``||pins: skriver digital pin P11 = 0||``, hopper vi inn i ``||functions: Launch||``.
 
@@ -413,7 +413,7 @@ function Launch () {
 
 ## Del 9.1: 
 
-Rearm av kofferten:
+### Rearm av kofferten:
 
 Når vi har sendt opp raketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen, og systemet er resatt. 
 
@@ -466,7 +466,7 @@ function Launch () {
 
 ## Del 9.2: 
 
-Rearm-funksjonen etter rearmeringen:
+### Rearm-funksjonen etter rearmeringen:
 
 Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
 
@@ -515,7 +515,7 @@ function Initialize () {
 ```
 ## Del 10: 
 
-Sette opp NeoPixelene:
+### Sette opp NeoPixelene:
 
 For å benytte oss av NeoPixelene for å vise om hvert av systemene er på eller av, må vi lage en ny funksjon: ``||functions: NeoPixels||``. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||`` 
 
@@ -563,7 +563,7 @@ function StatusCheck () {
 
 ## Del 11: 
 
-Buzzer:
+### Buzzer:
 
 For å varsle at raketten skal skytes opp, skal en buzzer bli skrudd på når vi alle systemene er på og armerte.
 
@@ -593,7 +593,7 @@ function StatusCheck () {
 
 ## Del 12: 
 
-BuzzerBlink funksjon:
+### BuzzerBlink-funksjon:
 
 Etter at raketten er skutt opp, skal vi få ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) til å tute og blinke 3 ganger.
 
