@@ -2,7 +2,7 @@
 
 ## Del 1: 
 
-Ved start:
+### Ved start:
 
 I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal brukes når kofferten skrus på.
 
