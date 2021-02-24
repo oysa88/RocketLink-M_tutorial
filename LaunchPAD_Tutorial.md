@@ -1,10 +1,14 @@
 # LaunchPAD Tutorial
 
-## Del 1: Ved start
+## Del 1: 
+
+Ved start:
 
 I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal settes i gang når kofferten skrus på.
 
-## Del 1.1: Ved start - radio
+## Del 1.1: 
+
+Ved start - radio:
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -16,7 +20,9 @@ Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterker
 radio.setGroup(1)
 radio.setTransmitPower(7)
 ```
-## Del 1.2: Ved start - resten
+## Del 1.2: 
+
+Ved start - resten:
 
 Sett opp NeoPixels for kofferten. Skal være 4 NeoPixels på ``||pins: P0||``.
 
@@ -29,7 +35,9 @@ radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 ```
 
-## Del 2: Initialize oppsett 
+## Del 2: 
+
+Initialize oppsett:
 
 For å kjøre oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
 
@@ -46,7 +54,9 @@ function Initialize () {
 }
 ```
 
-## Del 2.1: Initialize funksjon
+## Del 2.1: 
+
+Initialize funksjon:
 
 Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 5 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
@@ -69,7 +79,9 @@ function Initialize () {
 }
 ```
 
-## Del 2.2: Initialize - NeoPixels
+## Del 2.2: 
+
+Initialize - NeoPixels:
 
 Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
 
@@ -90,7 +102,9 @@ function Initialize () {
 }
 ```
 
-## Del 2.3: Initialize - animasjon
+## Del 2.3: 
+
+Initialize - animasjon:
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
 
@@ -142,7 +156,9 @@ function Initialize () {
 }
 ```
 
-## Del 3: StatusCheck oppsett
+## Del 3: 
+
+StatusCheck oppsett:
 
 For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
 
@@ -157,7 +173,9 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.1: StatusCheck - variabler
+## Del 3.1: 
+
+StatusCheck - variabler:
 
 Når vi kjører ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
@@ -185,7 +203,9 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.2: Fullføre StatusCheck
+## Del 3.2: 
+
+Fullføre StatusCheck:
 
 For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i funksjonen ``||functions: StatusCheck||``.
 
@@ -230,14 +250,18 @@ function StatusCheck () {
 }
 ```
 
-## Del 4: Sjekke Linkstatus til rakettkoffertene
+## Del 4.1: 
+
+Sjekke Linkstatus mellom rakettkoffertene:
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
 
 Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sier «Hei, jeg er ikke avskrudd». Men vi trenger noe som sier ifra hvis det har gått for lang tid siden sist vi fikk en radiomelding fra den andre kofferten.
 
 
-## Del 4.1: Sjekke at man mottar signal fra den andre kofferten
+## Del 4.2: 
+
+Sjekke at man mottar signal fra den andre kofferten:
 
 Lag en ny variabel: ``||variable: sistSettAktiv||``. 
 
@@ -252,7 +276,9 @@ radio.onReceivedNumber(function (receivedNumber) {
 })
 ```
 
-## Del 4.2: Lage en oppdateringsfrekvens
+## Del 4.3: 
+
+Lage en oppdateringsfrekvens:
 
 Lag en variabel som du kaller ``||variable: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
 
@@ -264,7 +290,9 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 let oppdateringsfrekvens = 200
 ```
 
-## Del 4.3: Sjekke om man slutter å motta signal fra den andre kofferten 
+## Del 4.4: 
+
+Sjekke om man slutter å motta signal fra den andre kofferten: 
 
 For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten funksjon som vi setter inn i  ``||controll: run in Background||``. (Finner du i menuen: Styring)
 
@@ -294,7 +322,9 @@ control.inBackground(function () {
 ```
 
 
-## Del 5: Forever-løkken
+## Del 5: 
+
+Forever-løkken:
 
 ``||basic: Gjenta for alltid||`` er den blokken som til en hver tid står og jobber og sjekker opp statusen til systemet vårt.
 
@@ -328,7 +358,9 @@ function StatusCheck () {
 	
 }
 ```
-## Del 6.1: Launch-funksjonen
+## Del 6.1: 
+
+Oppsett av Launch-funksjon:
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
@@ -374,7 +406,9 @@ function Launch () {
 ```
 
 
-## Del 6.2: Launch-funksjon
+## Del 6.2: 
+
+Sende Launch-kommando:
 
 Koden inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variabel: Klar||`` er ``||logic: sann||``.
 
@@ -403,15 +437,17 @@ function Launch () {
 }
 ```
 
-## Del 7.1: Rearm av kofferten
+## Del 7.1: 
+
+Rearm av kofferten:
 
 Når vi har sendt opp raketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen, og systemet er resatt. 
 
-For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. Den skal kalles opp fra bunnen i ``||functions: Launch||``).
+For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. Den skal kalles opp fra bunnen i ``||functions: Launch||`` (inne i ``||logic: Hvis-betingelsen||``). 
 
 Start med å skru av lysene til NeoPixels. Så skal vi lage en ``||loops: while-løkke||`` som er aktiv så lange  ``||pins: digital pin P1 = 0||``.
 
-Inni denne ``||loops: while-løkke||`` skal vi få skjermen på microbiten og Rearm LED til å blinke ved å stru ``||pins: P8||`` av og på.
+Inni denne ``||loops: while-løkke||`` skal vi få skjermen på microbiten til å blinke.
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -419,7 +455,6 @@ function Rearm () {
     strip.clear()
     strip.show()
     while (pins.digitalReadPin(DigitalPin.P1) == 0) {
-        pins.digitalWritePin(DigitalPin.P8, 0)
         basic.showLeds(`
             . . . . .
             . # # # .
@@ -427,7 +462,6 @@ function Rearm () {
             . # # # .
             . . . . .
             `)
-        pins.digitalWritePin(DigitalPin.P8, 1)
         basic.showLeds(`
             . . . . .
             . # # # .
@@ -454,11 +488,13 @@ function Launch () {
 ```
 
 
-## Del 7.2: Rearm-funksjonen etter rearmeringen
+## Del 7.2: 
+
+Rearm-funksjonen etter rearmeringen:
 
 Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
 
-Skru av ``||pins: P8||``, sett NeoPixels til ``||neopixel: Purple||`` og ``||basic: tøm skjermen||`` til microbiten.
+Sett NeoPixels til ``||neopixel: Purple||`` og ``||basic: tøm skjermen||`` til microbiten.
 
 Avslutt med en ``||basic: pause||`` i 200 ms. før vi kaller opp funksjonen ``||functions: Initialize||`` for å restarte rakett-kofferten.
 
@@ -468,7 +504,6 @@ function Rearm () {
     strip.clear()
     strip.show()
     while (pins.digitalReadPin(DigitalPin.P1) == 0) {
-        pins.digitalWritePin(DigitalPin.P8, 0)
         basic.showLeds(`
             . . . . .
             . # # # .
@@ -476,7 +511,6 @@ function Rearm () {
             . # # # .
             . . . . .
             `)
-        pins.digitalWritePin(DigitalPin.P8, 1)
         basic.showLeds(`
             . . . . .
             . # # # .
@@ -500,13 +534,15 @@ function Initialize () {
 	
 }
 ```
-## Del 8: Sette NeoPixelColors
+## Del 8: 
+
+Sette NeoPixelene:
 
 For å benytte oss av NeoPixelene for å vise om hvert av systemene er på eller av, må vi lage en ny funksjon: ``||functions: NeoPixels||``. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||`` 
 
-I denne skal vi inidividuelt sjekke om opp variablene: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatusLP||``, ``||variable: ArmStatusLP||`` og ``||variable: Klar||``.
+I denne skal vi individuelt sjekke opp variablene: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``.
 
-Hvis variabelen er ``||logic: sann||``, skal Neopixel settes til grønn, eller skal den være rød.
+Lag 4 ``||logic: Hvis-betingelser||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
 
 Avslutt med å vise lysene: ``||neopixel: show||``
 
@@ -523,54 +559,20 @@ function NeoPixels () {
     } else {
         strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
     }
-    if (IgniterStatusLP) {
+    if (IgniterStatus) {
         strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
     } else {
         strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
     }
-    if (ArmStatusLP) {
+    if (ArmStatus) {
         strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
     } else {
         strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
-    }
-    if (Klar) {
-        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Green))
-    } else {
-        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
     }
     strip.show()
 }
 function StatusCheck () {
     NeoPixels()
-}
-```
-
-
-## Del 9: Buzzer
-
-For å varsle at raketten skal skytes opp, skal en buzzer bli skrudd på når vi alle systemene er på og armerte.
-
-For å få til dette må vi lage en liten ``||logic: Hvis-betingelse||`` som sier at ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) skal skrus på (settes til 1) når variabelen ``||variabel: Klar||`` er ``||logic: sann||``. Eller skal de skrus av (settes til 0).
-
-```blocks
-let strip: neopixel.Strip = null
-basic.forever(function () {
-    StatusCheck()
-    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-        strip.showColor(neopixel.colors(NeoPixelColors.Red))
-        basic.pause(100)
-        StatusCheck()
-    }
-    if (Klar) {
-        pins.digitalWritePin(DigitalPin.P13, 1)
-        pins.digitalWritePin(DigitalPin.P14, 1) 
-    } else {
-        pins.digitalWritePin(DigitalPin.P13, 0)
-        pins.digitalWritePin(DigitalPin.P14, 0)
-    }
-})
-function StatusCheck () {
-	
 }
 ```
 
