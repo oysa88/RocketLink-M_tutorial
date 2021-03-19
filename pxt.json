@@ -1,5 +1,5 @@
 {
-    "name": "Flaskespilling",
+    "name": "Makekit - Tutorial",
     "version": "0.0.1",
     "description": "",
     "dependencies": {
@@ -10,7 +10,8 @@
     "files": [
         "main.ts",
         "README.md",
-        "tutorial.md"
+        "Hoverbit_tutorial.md",
+        "Airbit_tutorial.md"
     ],
     "testFiles": [
         "test.ts"
