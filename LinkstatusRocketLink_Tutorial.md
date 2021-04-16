@@ -1,6 +1,3 @@
-!### @flyoutOnly
-!### @explicitHints
-
 # Sjekke Linkstatus til rakettkoffertene
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
