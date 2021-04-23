@@ -104,6 +104,8 @@ function Initialize () {
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
 
+Sett alle lysene til å lyse Rød (``||neopixel: Rød||``)
+
 Avslutt med en liten ``||basic: pause||`` på 200 ms.
 
 ```blocks
@@ -146,6 +148,7 @@ function Initialize () {
     # . . . #
     # . . . #
     `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red)) 
     basic.pause(200)
 }
 ```
@@ -186,14 +189,14 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.2: 
+## Del 3.2: @unplugged
 
-### StatusCheck - "I`ll be back!"
+### StatusCheck - "I`ll be back!" 
 
 Vi er ikke ferdig med ``||functions: StatusCheck||``. Vi må fikse et par ting før vi kommer tilbake hit.
 
 
-## Del 4: 
+## Del 4: @unplugged
 
 ### Sjekke Linkstatus mellom rakettkoffertene:
 
@@ -255,12 +258,12 @@ Avslutt med en ``||basic: pause||`` lik ``||variabel: oppdateringsfrekvens||``.
 ```blocks
 control.inBackground(function () {
     while (true) {
-        radio.sendNumber(10)
+        radio.sendNumber(11)
         if (input.runningTime() - sistSettAktiv > 3 * oppdateringsfrekvens) {
             LinkStatus = false
         }
-    }
     basic.pause(oppdateringsfrekvens)
+    }
 })
 ```
 
