@@ -1,10 +1,11 @@
 # ControllerPAD Tutorial
 
-## Del 1: 
+## Del 1: @unplugged
 
 ### Ved start:
 
 I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal brukes når kofferten skrus på.
+
 
 ## Del 1.1: 
 
@@ -20,6 +21,7 @@ Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterker
 radio.setGroup(1)
 radio.setTransmitPower(7)
 ```
+
 ## Del 1.2: 
 
 ### Ved start - resten
@@ -104,7 +106,7 @@ function Initialize () {
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
 
-Sett alle lysene til å lyse Rød (``||neopixel: Rød||``)
+Etter animasjonen skal alle lysene settes til å lyse Rødt (``||neopixel: Rød||``)
 
 Avslutt med en liten ``||basic: pause||`` på 200 ms.
 
@@ -211,14 +213,16 @@ Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sie
 
 Lag en ny variabel: ``||variable: sistSettAktiv||``. 
 
-Inni en ``||radio:når radio mottar receivedNumber||``: Sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og sett ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
+Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``,sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
 
 I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variable: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variable: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
-    LinkStatus = true
-    sistSettAktiv = input.runningTime()
+    if (receivedNumber == 11){
+        LinkStatus = true
+        sistSettAktiv = input.runningTime()
+    }
 })
 ```
 
@@ -281,8 +285,10 @@ Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||lo
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
-    LinkStatus = true
-    sistSettAktiv = input.runningTime()
+    if (receivedNumber == 11){
+        LinkStatus = true
+        sistSettAktiv = input.runningTime()
+    }
     if (receivedNumber == 21) {
         IgniterStatusLP = true
     } else if (receivedNumber == 22) {
@@ -644,9 +650,236 @@ function Rearm () {
 }
 ```
 
+## Del 13:
+
+Gratulerer! Du er nå ferdig å programmere ControllerPAD! 
+
+``||math: Last ned||`` koden på en micro:bit og sjekk at den fungerer som den skal.
+
+```blocks
+let Klar = false
+let ArmStatus = false
+let SelfStatus = false
+let ArmStatusLP = false
+let IgniterStatusLP = false
+let sistSettAktiv = 0
+let LinkStatus = false
+let strip: neopixel.Strip = null
+strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
+radio.setGroup(1)
+radio.setTransmitPower(7)
+pins.digitalWritePin(DigitalPin.P15, 1)
+let oppdateringsfrekvens = 200
+Initialize()
+function Initialize () {
+    SelfStatus = false
+    LinkStatus = false
+    ArmStatus = false
+    Klar = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . # . .
+        . . . . .
+        . . . . .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . # # # .
+        . # . # .
+        . # # # .
+        . . . . .
+        `)
+    basic.showLeds(`
+        # # # # #
+        # . . . #
+        # . . . #
+        # . . . #
+        # # # # #
+        `)
+    basic.showLeds(`
+        # . . . #
+        # # . # #
+        # . # . #
+        # . . . #
+        # . . . #
+        `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    basic.pause(200)
+}
+basic.forever(function () {
+    StatusCheck()
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        basic.pause(100)
+        StatusCheck()
+    }
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
+    if (Klar) {
+        pins.digitalWritePin(DigitalPin.P13, 1)
+        pins.digitalWritePin(DigitalPin.P14, 1)
+    } else {
+        pins.digitalWritePin(DigitalPin.P13, 0)
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
+    basic.pause(100)
+})
+function StatusCheck () {
+    SelfStatus = true
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        ArmStatus = true
+    } else {
+        ArmStatus = false
+    }
+    if (SelfStatus && LinkStatus && IgniterStatusLP && ArmStatusLP && ArmStatus) {
+        Klar = true
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
+    } else {
+        Klar = false
+        basic.showLeds(`
+            # . . . #
+            # # . # #
+            # . # . #
+            # . . . #
+            # . . . #
+            `)
+    }
+    NeoPixels()
+}
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (IgniterStatusLP) {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatusLP) {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (Klar) {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
+    }
+    strip.show()
+}
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 11) {
+        LinkStatus = true
+        sistSettAktiv = input.runningTime()
+    }
+    if (receivedNumber == 21) {
+        IgniterStatusLP = true
+    } else if (receivedNumber == 22) {
+        IgniterStatusLP = false
+    }
+    if (receivedNumber == 31) {
+        ArmStatusLP = true
+    } else if (receivedNumber == 32) {
+        ArmStatusLP = false
+    }
+})
+function Launch () {
+    if (Klar) {
+        BuzzerBlink()
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        radio.sendNumber(42)
+        Klar = false
+        Rearm()
+    }
+}
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        pins.digitalWritePin(DigitalPin.P8, 1)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+    pins.digitalWritePin(DigitalPin.P8, 0)
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(100)
+    Initialize()
+}
+function BuzzerBlink () {
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+}
+control.inBackground(function () {
+    while (true) {
+        radio.sendNumber(11)
+        if (input.runningTime() - sistSettAktiv > 3 * oppdateringsfrekvens) {
+            LinkStatus = false
+            IgniterStatusLP = false
+            ArmStatusLP = false
+        }
+        basic.pause(oppdateringsfrekvens)
+    }
+})
+```
+
 
 ```package
 neopixel=github:microsoft/pxt-neopixel#v0.7.3
 ```
-
-gulp testtutorials
