@@ -2,14 +2,20 @@
 
 ## Del 1: @unplugged
 
-### Ved start:
+### Programmere ControllerPAD @unplugged
 
-I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal brukes når kofferten skrus på.
+I denne veiledningen skal vi gå igjennom hvordan man programmerer ControllerPAD-kofferten til RocketLink oppskytningssystem. 
+
+Vi skal sette opp radiokommunikasjon til LauchPAD, for å finne ut om det er klart til å skyte opp raketten. Hvis alt er klart skal vi sende signal tilbake om å skyte opp raketten!
+
+![Controller-PAD-500px.jpg](https://i.postimg.cc/1tjNfDMm/Controller-PAD-500px.jpg)
 
 
 ## Del 1.1: 
 
-### Ved start - radio:
+### Ved start - radio
+
+I blokken ``||basic: ved start||`` skal vi sette opp de funksjonene som kun skal brukes når kofferten skrus på.
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -37,7 +43,18 @@ radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 ```
 
-## Del 2: 
+## Del 2: @unplugged
+
+### Initialize
+
+Vi skal lage en funksjon for kofferten som heter ``||functions: Initialize||``. 
+
+Funksjonen skal kjøres hver gang vi skrur på ControllerPAD og hver gang vi rearmerer kofferten etter en oppskytning. 
+
+![Initialize.gif](https://i.postimg.cc/rFfWbdvN/Initialize.gif)
+
+
+## Del 2.1
 
 ### Initialize oppsett: 
 
@@ -56,7 +73,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.1: 
+## Del 2.2: 
 
 ### Initialize funksjon:
 
@@ -79,7 +96,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.2: 
+## Del 2.3: 
 
 ### Initialize - NeoPixels:
 
@@ -100,7 +117,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.3: 
+## Del 2.4: 
 
 ### Initialize - animasjon:
 
@@ -155,7 +172,27 @@ function Initialize () {
 }
 ```
 
-## Del 3: 
+## Del 2.5:
+
+### Teste Initialize!
+
+``||math: Last ned||`` koden på en micro:bit og sjekk at den fungerer som den skal på ControllerPAD-kofferten.
+
+
+## Del 3: @unplugged 
+
+### StatusCheck
+
+Vi skal lage en funksjon for kofferten som heter ``||functions: StatusCheck||``. 
+
+Funksjonen skal sjekke statusen til de forskjellige systemene på ControllerPAD. 
+
+Vi skal lage koden for ett og ett system av gangen, og teste hvert system når det er ferdig. 
+
+![System-Status-Controller-PAD.gif](https://i.postimg.cc/Rh2GqPLT/System-Status-Controller-PAD.gif)
+
+
+## Del 3.1:
 
 ### StatusCheck oppsett:
 
@@ -163,20 +200,21 @@ For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer,
 
 Denne funksjonen skal kalles opp fra en ``||basic: gjenta for alltid||``.
 
+
 ```blocks
 basic.forever(function () {
     StatusCheck()
 })
 function StatusCheck () {
-	
+
 }
 ```
 
-## Del 3.1: 
+## Del 3.2: 
 
-### StatusCheck - variabler:
+### StatusCheck - variablene SelfStatus og ArmStatus:
 
-Når vi kjører en ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Når vi kjører gjennom ``||function: StatusCheck||``, vet vi at variabelen``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
 Videre, lag en ``||logic: Hvis-betingelse||`` som skal lese av ``||pins: P1||`` (Arm-knappen). Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
 
@@ -191,7 +229,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.2: @unplugged
+## Del 3.4: @unplugged
 
 ### StatusCheck - "I`ll be back!" 
 
