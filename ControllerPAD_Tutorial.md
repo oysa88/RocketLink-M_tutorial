@@ -1,12 +1,15 @@
 # ControllerPAD Tutorial
 
+### @diffs true
+
+
 ## Del 1: @unplugged
 
 ### Programmere ControllerPAD @unplugged
 
 I denne veiledningen skal vi gå igjennom hvordan man programmerer ControllerPAD-kofferten til RocketLink oppskytningssystem. 
 
-Vi skal sette opp radiokommunikasjon til LauchPAD, for å finne ut om det er klart til å skyte opp raketten. Hvis alt er klart skal vi sende signal tilbake om å skyte opp raketten!
+Vi skal sette opp radiokommunikasjon for å snakke med LauchPAD, for å finne ut om det er klart til å skyte opp raketten. Hvis alt er klart skal vi sende signal tilbake om å skyte opp raketten!
 
 ![Controller-PAD-500px.jpg](https://i.postimg.cc/1tjNfDMm/Controller-PAD-500px.jpg)
 

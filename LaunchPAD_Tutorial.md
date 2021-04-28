@@ -1,14 +1,28 @@
 # LaunchPAD Tutorial
 
-## Del 1: 
+### @diffs true
 
-### Ved start:
 
-I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal settes i gang når kofferten skrus på.
+## Del 1: @unplugged
+
+### Programmere LaunchPAD @unplugged
+
+I denne veiledningen skal vi gå igjennom hvordan man programmerer LaunchPAD-kofferten til RocketLink oppskytningssystem. 
+
+Vi skal sette opp radiokommunikasjon for å snakke med ControllerPAD, for å si ifra om det er klart til å skyte opp raketten. Hvis alt er klart, kan kofferten motta signal om å skyte opp raketten!
+
+Vi kommer til å hoppe mellom veiledningen for å programmere LaunchPAD og ControllerPAD. Du får beskjed når du skal bytte mellom veiledningene og når du skal teste koden underveis.
+
+Lykke til!
+
+![Launch-PAD-500px.jpg](https://i.postimg.cc/fySSXkgx/Launch-PAD-500px.jpg)
+
 
 ## Del 1.1: 
 
 ### Ved start - radio:
+
+I blokken ``||basic: ved start||`` skal si sette opp de funksjonene som kun skal settes i gang når kofferten skrus på.
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -20,6 +34,7 @@ Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterker
 radio.setGroup(1)
 radio.setTransmitPower(7)
 ```
+
 ## Del 1.2: 
 
 ### Ved start - resten:
@@ -29,38 +44,48 @@ Sett opp NeoPixels for kofferten. Skal være 4 NeoPixels på ``||pins: P0||``.
 Skriv at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.)
 
 ```blocks
-let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 radio.setGroup(1)
 radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
+let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 ```
 
-## Del 2: 
+## Del 2: @unplugged
+
+### Initialize
+
+Vi skal lage en funksjon for kofferten som heter ``||functions: Initialize||``. 
+
+Funksjonen skal kjøres hver gang vi skrur på LaunchPAD og hver gang vi rearmerer kofferten etter en oppskytning. 
+
+![Initialize.gif](https://i.postimg.cc/rFfWbdvN/Initialize.gif)
+
+## Del 2.1: 
 
 ### Initialize oppsett:
 
 For å kjøre oppstartsekvensen til RocketLink-M, må vi lage en funksjon som vi kaller: ``||functions: Initialize||``.
 
-Det er flere steder i koden vår vi skal kalle opp ``||functions: Initialize||``. Den første er i ``||basic: ved start||``.
+Det er flere steder i koden vår vi skal kalle opp ``||functions: Initialize||``. Den første er i bunn av blokken: ``||basic: ved start||``.
 
 ```blocks
-let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 radio.setGroup(1)
 radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
+let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 Initialize()
 function Initialize () {
 	
 }
 ```
 
-## Del 2.1: 
+## Del 2.2: 
 
 ### Initialize funksjon:
 
 Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 5 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
-``||variable: SelfStatus||`` sjekker om kofferten er på, ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten, ``||variable: IgniterStatus||`` sjekker om igniter er riktig koblet til raketten, ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på, og ``||variable: Klar||`` sjekker om alle systemene på kofferten er på.
+``||variable: SelfStatus||`` sjekker om kofferten er på, ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten, ``||variable: IgniterStatus||`` sjekker om ledningene er riktig koblet til tenneren i raketten, ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på, og ``||variable: Klar||`` sjekker om alle systemene på kofferten er på.
 
 Sett alle disse 5 variablene til er være ``||logic: usann||``
 
@@ -79,7 +104,7 @@ function Initialize () {
 }
 ```
 
-## Del 2.2: 
+## Del 2.3: 
 
 ### Initialize - NeoPixels:
 
@@ -102,11 +127,13 @@ function Initialize () {
 }
 ```
 
-## Del 2.3: 
+## Del 2.4: 
 
 ### Initialize - animasjon:
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. Dette er kun et forslag.
+
+Etter animasjonen skal alle lysene settes til å lyse Rødt (``||neopixel: Rød||``)
 
 Avslutt med en liten ``||basic: pause||`` på 200 ms.
 
@@ -152,11 +179,33 @@ function Initialize () {
     # . . . #
     # . . . #
     `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
     basic.pause(200)
 }
 ```
 
-## Del 3: 
+## Del 2.5:
+
+### Teste Initialize!
+
+``||math: Last ned||`` koden på en micro:bit og sjekk om oppstart at den fungerer som den skal på LaunchPAD-kofferten.
+
+
+## Del 3: @unplugged 
+
+### StatusCheck
+
+Vi skal lage en funksjon for kofferten som heter ``||functions: StatusCheck||``. 
+
+Funksjonen skal sjekke statusen til de forskjellige systemene på ControllerPAD. 
+
+Vi skal lage koden for ett og ett system av gangen, og teste hvert system når det er ferdig. 
+
+![System-Status-Controller-PAD.gif](https://i.postimg.cc/Rh2GqPLT/System-Status-Controller-PAD.gif)
+
+
+
+## Del 3.1: 
 
 ### StatusCheck oppsett:
 
