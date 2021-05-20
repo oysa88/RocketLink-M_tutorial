@@ -98,11 +98,6 @@ Sett alle disse 5 variablene til er være ``||logic: usann||``
 | Klar ||||| Usann |
 
 ```blocks
-let SelfStatus = false
-let LinkStatus = false
-let IgniterStatus = false
-let ArmStatus = false
-let Klar = false
 function Initialize () {
 	SelfStatus = false
     LinkStatus = false
@@ -120,11 +115,6 @@ Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel st
 
 ```blocks
 let strip: neopixel.Strip = null
-let SelfStatus = false
-let LinkStatus = false
-let IgniterStatus = false
-let ArmStatus = false
-let Klar = false
 function Initialize () {
 	SelfStatus = false
     LinkStatus = false
@@ -147,11 +137,6 @@ Avslutt med en liten ``||basic: pause||`` på 200 ms.
 
 ```blocks
 let strip: neopixel.Strip = null
-let SelfStatus = false
-let LinkStatus = false
-let IgniterStatus = false
-let ArmStatus = false
-let Klar = false
 function Initialize () {
 	SelfStatus = false
     LinkStatus = false
@@ -203,7 +188,7 @@ function Initialize () {
 
 ### Bytte Tutorial
 
-Vi skal nå bytte veiledning, og fortsette å lage koden til LaunchPAD-kofferten!
+Vi skal nå bytte veiledning, og fortsette å lage koden til ControllerPAD-kofferten!
 
 ![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
 
@@ -214,9 +199,7 @@ Vi skal nå bytte veiledning, og fortsette å lage koden til LaunchPAD-kofferten
 
 Vi skal fortsette på koden som styrer LaunchPAD.
 
-Vi skal lage en funksjon for kofferten som heter ``||functions: StatusCheck||``. 
-
-Funksjonen skal sjekke statusen til de forskjellige systemene på LaunchPAD. 
+Vi skal lage en funksjon for kofferten som heter ``||functions: StatusCheck||``. Funksjonen skal sjekke statusen til de forskjellige systemene på LaunchPAD. 
 
 Vi skal lage koden for ett og ett system av gangen, og teste hvert system når det er ferdig. 
 
@@ -227,7 +210,7 @@ Vi skal lage koden for ett og ett system av gangen, og teste hvert system når d
 
 ### Sette opp NeoPixels
 
-For å benytte oss av NeoPixelene for å vise om hvert av systemene er på eller av, må vi lage en ny funksjon: ``||functions: NeoPixels||``. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||`` 
+For å benytte oss av NeoPixelene, for å vise om hvert av systemene er på eller av, må vi lage en ny funksjon: ``||functions: NeoPixels||``. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||`` 
 
 I denne skal vi individuelt sjekke opp variablene: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``.
 
