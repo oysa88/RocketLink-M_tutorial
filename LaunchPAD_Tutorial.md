@@ -37,7 +37,7 @@ radio.setTransmitPower(7)
 
 ### Ved start - resten:
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 4 NeoPixels på ``||pins: digital pin P0||``.
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 4 NeoPixels på ``||pixels: digital pin P0||``.
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 
@@ -280,7 +280,7 @@ function StatusCheck () {
 
 ### Bytte Tutorial
 
-Vi skal nå bytte veiledning, og fortsette å lage koden til LaunchPAD-kofferten!
+Vi skal nå bytte veiledning, og fortsette å lage koden til ControllerPAD-kofferten!
 
 ![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
 
@@ -373,12 +373,12 @@ Nå som vi er ferdig med å sette opp funksjonen for ``||variable: LinkStatus||`
 
 ### IgniterStatus og ArmStatus
 
-LaunchPAD skal sende statusen til igniteren og arm-knappen til ControllerPAD. I denne delen skal vi lese av verdiene til igniter og arm, og sende 
+LaunchPAD skal sende statusen til igniteren og arm-knappen til ControllerPAD. I denne delen skal vi lese av verdiene til igniter og arm, og sende de over radio til den andre kofferten.
 
 ![Radio-mellom-rakettkoffertene.gif](https://i.postimg.cc/nL4Rtr4R/Radio-mellom-rakettkoffertene.gif)
 
 
-## Del 3.1: 
+## Del 5.1: 
 
 ### StatusCheck - variabler:
 
@@ -406,7 +406,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.2: 
+## Del 5.2: 
 
 ### Fullføre StatusCheck:
 
@@ -454,7 +454,7 @@ function StatusCheck () {
 ```
 
 
-## Del 5: 
+## Del 6: 
 
 ### Forever-løkken:
 
