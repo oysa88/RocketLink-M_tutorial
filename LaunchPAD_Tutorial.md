@@ -382,11 +382,11 @@ LaunchPAD skal sende statusen til igniteren og arm-knappen til ControllerPAD. I 
 
 ### StatusCheck - variabler:
 
-Videre skal vi finne ut status på ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``. Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variable: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
+Videre skal vi finne ut status på ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``. 
 
-Hvis ``||variable: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
-
-Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||`` og vi skal sende en ``||radio: radio send tall = 31||`` til ControllerPAD. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||`` og vi skal sende en ``||radio: radio send tall = 32||`` til ControllerPAD.
+- Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variable: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
+- Hvis ``||variable: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
+- Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||`` og vi skal sende en ``||radio: radio send tall = 31||`` til ControllerPAD. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||`` og vi skal sende en ``||radio: radio send tall = 32||`` til ControllerPAD.
 
 ```blocks
 function StatusCheck () {
@@ -408,13 +408,51 @@ function StatusCheck () {
 
 ## Del 5.2: 
 
-### Fullføre StatusCheck:
+### Teste om igniter er koblet til rakett
+
+Inne i ``||basic: Gjenta for alltid||`` skal vi lage funksjonen som tester om igniteren er koblet riktig til raketten.
+
+For å sjekke dette, må vi trykker ned knappen til System Status Check på kofferten. Så hvis knappen trykkes ned, settes ``|pins: digital pin P5 ||`` til 0.
+
+Inni ``||logic: hvis-betingelsen||``:
+
+- Start med å sette alle NeoPixelene til ``||neopixel: rød||``.
+- For å kunne lese av ``||pins: digital pin P2||`` (Ignitersjekk), må vi skrive ``||pins: digital pin P14||`` (Ignitersjekk-sikkerhet) til HØY (1) i 200 ms før den skrives til LAV (0) igjen. Mens ``||pins: P14||`` er HØY skal vi lese av ``||pins: digital pin P2||``. 
+
+Så hvis ``||pins: digital pin P2||`` er HØY (1), skal ``||variabel: IgniterStatus||`` settes til ``||logic: sann||``. Ellers skal den settes til ``||logic: usann||``.
+
+
+```blocks
+let strip: neopixel.Strip = null
+basic.forever(function () {
+    StatusCheck()
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        pins.digitalWritePin(DigitalPin.P14, 1)
+        if (pins.digitalReadPin(DigitalPin.P2) == 1) {
+            IgniterStatus = true
+            }
+        else {
+            IgniterStatus = false
+            }
+        basic.pause(200)
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
+})
+function StatusCheck () {
+	
+}
+```
+
+## Del 5.3: 
+
+### Sjekke om LaunchPAD er klar for oppskytning
 
 For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i funksjonen ``||functions: StatusCheck||``.
 
 Vi skal sjekke: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``.
 
-Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variable: Klar||`` settes lik ``||logic: sann||``. Ellers lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variabel: Klar||`` er ``||logic: sann||`` eller ikke.
+Hvis alle statusene over er lik``||logic: sann||``, da skal variabelen ``||variable: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variabel: Klar||`` er ``||logic: sann||`` eller ikke.
 
 ```blocks
 function StatusCheck () {
@@ -453,54 +491,40 @@ function StatusCheck () {
 }
 ```
 
+## Del 5.4:
 
-## Del 6: 
+### Teste Initialize!
 
-### Forever-løkken:
-
-``||basic: Gjenta for alltid||`` er den blokken som til en hver tid står og jobber og sjekker opp statusen til systemet vårt.
-
-For å kunne sjekke om igniteren er koblet til riktig, må vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, settes ``|pins: digital pin P5 ||`` til 0.
-
-Start med å sette alle NeoPixelene til ``||neopixel: rød||``
-
-For å kunne lese av ``||pins: digital pin P2||``, må vi skrive ``||pins: digital pin P14||`` til HØY (1) i 200 ms før den skrives til LAV (0) igjen. Mens ``||pins: P14||`` er HØY skal vi lese av ``||pins: digital pin P2||`` (igniter-test). 
-
-Så hvis ``||pins: digital pin P2||`` er HØY (1), skal ``||variabel: IgniterStatus||`` settes til ``||logic: sann||``. Ellers skal den settes til ``||logic: usann||``.
+``||math: Last ned||`` koden på en micro:bit og sjekk at alle statusene fungerer som den skal på LaunchPAD-kofferten.
 
 
-```blocks
-let strip: neopixel.Strip = null
-basic.forever(function () {
-    StatusCheck()
-    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-        strip.showColor(neopixel.colors(NeoPixelColors.Red))
-        pins.digitalWritePin(DigitalPin.P14, 1)
-        if (pins.digitalReadPin(DigitalPin.P2) == 1) {
-            IgniterStatus = true
-            }
-        else {
-            IgniterStatus = false
-            }
-        basic.pause(200)
-        pins.digitalWritePin(DigitalPin.P14, 0)
-    }
-})
-function StatusCheck () {
-	
-}
-```
-## Del 6.1: 
+## Del 5.5: @unplugged
 
-### Oppsett av Launch-funksjon:
+### Bytte Tutorial
+
+Vi skal nå bytte veiledning, og fortsette å lage koden til ControllerPAD-kofferten!
+
+![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
+
+
+## Del 6: @unplugged
+
+### Oppskytning av raketten
+
+Nå skal alle systemene på begge koffertene fungere, og vi er klare for å bygge funksjonene for å kunne skyte opp raketten!
+
+![Oppskytning-rakett-4.gif](https://i.postimg.cc/CxV5Qx0C/Oppskytning-rakett-4.gif)
+
+
+## Del 6.1:
+
+### Oppsett av Launch-funksjon
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
-Vi trenger også en ny variabel: ``||variabel: Oppskytning||``.
-
-I ``||basic: når radio mottar receivedNumber||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at ``||variabel: Oppskytning||`` er ``||logic: sann||`` hvis ``||radio: receivedNumber = 42||``.
-
-I ``||basic: gjenta for alltid||`` skal vi sjekke om ``||variabel: Oppskytning||`` er ``||logic: sann||`` eller ikke. Hvis ``||variabel: Oppskytning||`` er ``||logic: sann||``, skal vi kalle opp funksjonen ``||functions: Launch||``.
+- Vi trenger også en ny variabel: ``||variabel: Oppskytning||``.
+- I ``||basic: når radio mottar receivedNumber||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at ``||variabel: Oppskytning||`` er ``||logic: sann||`` hvis ``||radio: receivedNumber = 42||``.
+- I ``||basic: gjenta for alltid||`` skal vi sjekke om ``||variabel: Oppskytning||`` er ``||logic: sann||`` eller ikke. Hvis ``||variabel: Oppskytning||`` er ``||logic: sann||``, skal vi kalle opp funksjonen ``||functions: Launch||``.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
@@ -540,7 +564,7 @@ function Launch () {
 
 ## Del 6.2: 
 
-### Sende Launch-kommando:
+### Sende opp raketten!
 
 Koden inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variabel: Klar||`` er ``||logic: sann||``.
 
@@ -572,7 +596,7 @@ function Rearm () {
 }
 ```
 
-## Del 7.1: 
+## Del 6.3: 
 
 ### Rearm av kofferten:
 
@@ -669,8 +693,205 @@ function Initialize () {
 	
 }
 ```
+## Del 8:
 
+### Gratulerer! Du er nå ferdig med å programmere LaunchPAD-Kofferten!
 
+``||math: Last ned||`` kodene for både ControllerPAD og LaunchPAD på hver sin micro:bit, og sjekk at de fungerer som de skal. 
+
+```blocks
+let Klar = false
+let ArmStatus = false
+let IgniterStatus = false
+let IgniterCheck = 0
+let SelfStatus = false
+let Oppskytning = false
+let sistSettAktiv = 0
+let LinkStatus = false
+let strip: neopixel.Strip = null
+strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
+radio.setGroup(1)
+radio.setTransmitPower(7)
+pins.digitalWritePin(DigitalPin.P15, 1)
+let oppdateringsfrekvens = 200
+Initialize()
+function Initialize () {
+    SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Oppskytning = false
+    Klar = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . # . .
+        . . . . .
+        . . . . .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . # # # .
+        . # . # .
+        . # # # .
+        . . . . .
+        `)
+    basic.showLeds(`
+        # # # # #
+        # . . . #
+        # . . . #
+        # . . . #
+        # # # # #
+        `)
+    basic.showLeds(`
+        # . . . #
+        # # . # #
+        # . # . #
+        # . . . #
+        # . . . #
+        `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    basic.pause(200)
+}
+basic.forever(function () {
+    StatusCheck()
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        pins.digitalWritePin(DigitalPin.P14, 1)
+        IgniterCheck = pins.digitalReadPin(DigitalPin.P2)
+        basic.pause(200)
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
+    if (Oppskytning) {
+        Launch()
+    }
+    basic.pause(100)
+})
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 11) {
+        LinkStatus = true
+        sistSettAktiv = input.runningTime()
+    }
+    if (receivedNumber == 42) {
+        Oppskytning = true
+    }
+})
+function StatusCheck () {
+    SelfStatus = true
+    if (IgniterCheck == 1) {
+        IgniterStatus = true
+        radio.sendNumber(21)
+    } else {
+        IgniterStatus = false
+        radio.sendNumber(22)
+    }
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        ArmStatus = true
+        radio.sendNumber(31)
+    } else {
+        ArmStatus = false
+        radio.sendNumber(32)
+    }
+    if (SelfStatus && LinkStatus && IgniterStatus && ArmStatus) {
+        Klar = true
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
+    } else {
+        Klar = false
+        basic.showLeds(`
+            # . . . #
+            # # . # #
+            # . # . #
+            # . . . #
+            # . . . #
+            `)
+    }
+    NeoPixels()
+}
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (IgniterStatus) {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatus) {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
+    strip.show()
+}
+function Launch () {
+    if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        Rearm()
+    }
+}
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(100)
+    Initialize()
+}
+control.inBackground(function () {
+    while (true) {
+        radio.sendNumber(11)
+        if (input.runningTime() - sistSettAktiv > 3 * oppdateringsfrekvens) {
+            LinkStatus = false
+        }
+        basic.pause(oppdateringsfrekvens)
+    }
+})
+```
 
 ```package
 neopixel=github:microsoft/pxt-neopixel#v0.7.3

@@ -415,26 +415,29 @@ Bytt veiledning, og fortsett å lage koden til LaunchPAD-kofferten!
 ![Launch-PAD.jpg](https://i.postimg.cc/Sxhw0Mck/Launch-PAD.jpg)
 
 
-## Del 5: 
+## Del 5: @unplugged
 
-### Motta statusoppdatering fra LaunchPAD-kofferten
+### Motta status fra LaunchPAD-kofferten og sette opp StatusCheck
 
 Det er to til statuser vi får fra LaunchPAD: ``||variabel: IgniterStatusLP||`` og ``||variabel: ArmStatusLP||``. (Disse to sjekker om igniterne er koblet ordentlig til raketten, og om Arm-knappen på LaunchPAD-kofferten er skrudd på.)
 
 Vi skal nå sette opp hva som skal skje når vi mottar disse statusoppdateringene. 
+
+Vi skal også sette opp resten av funksjonene i StatusCheck.
 
 ![Radio-mellom-rakettkoffertene.gif](https://i.postimg.cc/nL4Rtr4R/Radio-mellom-rakettkoffertene.gif)
 
 
 ## Del 5.1: 
 
-### Motta statusoppdatering fra LaunchPAD-kofferten
+### Motta status på Igniter og Arm via radio
 
 Vi må lage to ``||logic: Hvis-betingelse||`` med ``||logic: ellers hvis||`` som skal sjekket hver av disse statusene. 
 
-Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 22||``, er ``||variabel: IgniterStatusLP||`` ``||logic: usann||``.
+Settes inn i ``||radio:når radio mottar receivedNumber||``:
 
-Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 32||``, er ``||variabel: ArmStatusLP||`` ``||logic: usann||``.
+- Hvis ``||radio: receivedNumber = 21||``, er ``||variabel: IgniterStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 22||``, er ``||variabel: IgniterStatusLP||`` ``||logic: usann||``.
+- Hvis ``||radio: receivedNumber = 31||``, er ``||variabel: ArmStatusLP||`` ``||logic: sann||``. Ellers hvis ``||radio: receivedNumber = 32||``, er ``||variabel: ArmStatusLP||`` ``||logic: usann||``.
 
 | Variabel | Radio Sann | Radio Usann |
 |:---------|:----------:|:-----------:|
@@ -460,15 +463,13 @@ radio.onReceivedNumber(function (receivedNumber) {
 })
 ```
 
+## Del 5.2: 
 
+### StatusCheck - ArmStatus:
 
-## Del 3.2: 
+Videre inni ``||function: StatusCheck||``, lag en ``||logic: hvis-betingelse||`` som skal lese av ``||pins: P1||`` (Arm-knappen). 
 
-### StatusCheck - variablene SelfStatus og ArmStatus:
-
-
-
-Videre, lag en ``||logic: hvis-betingelse||`` som skal lese av ``||pins: P1||`` (Arm-knappen). Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
+- Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
 
 ```blocks
 function StatusCheck () {
@@ -481,7 +482,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 3.3: 
+## Del 5.3: 
 
 ### Fullføre StatusCheck
 
@@ -521,23 +522,15 @@ function StatusCheck () {
 }
 ```
 
+## Del 5.4: 
 
+### Oppdatere StatusCheck
 
-
-
-
-
-
-
-## Del 7: 
-
-### Forever-løkken:
-
-``||basic: Gjenta for alltid||`` er den blokken som til en hver tid står og jobber, og sjekker opp statusen til systemet vårt. Vi skal nå gjøre den ferdig.
+Inni ``||basic: Gjenta for alltid||``:
 
 Vi ønsker å kjøre en systemsjekk hver gang vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, settes ``|pins: digital pin P5 ||`` til 0. 
 
-Så hvis ``||pins: P5 = 0||``, skal alle NeoPixels bli ``||neopixel: røde||`` i 100 ms, og så skal vi kalle opp funskjonen ``||functions: StatusCheck||``.
+Så hvis ``||pins: P5 = 0||``, skal alle NeoPixels bli ``||neopixel: røde||`` i 100 ms, og så skal vi kalle opp funksjonen ``||functions: StatusCheck||``.
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -553,9 +546,19 @@ function StatusCheck () {
 	
 }
 ```
-## Del 8.1: 
 
-### Sette opp Launch-funksjon:
+## Del 6: @unplugged
+
+### Oppskytning av raketten
+
+Nå skal alle systemene på begge koffertene fungere, og vi er klare for å bygge funksjonene for å kunne skyte opp raketten!
+
+![Oppskytning-rakett-4.gif](https://i.postimg.cc/CxV5Qx0C/Oppskytning-rakett-4.gif)
+
+
+## Del 6.1: 
+
+### Sette opp Launch-funksjon
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
@@ -582,7 +585,7 @@ function Launch () {
 }
 ```
 
-## Del 8.2: 
+## Del 6.2: 
 
 ### Sende Launch-kommando:
 
@@ -608,118 +611,13 @@ function Launch () {
 }
 ```
 
-## Del 9.1: 
-
-### Rearm av kofferten:
-
-Når vi har sendt opp raketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen, og systemet er resatt. 
-
-For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. Den skal kalles opp fra bunnen i ``||functions: Launch||``.
-
-Start med å skru av lysene til NeoPixels. Så skal vi lage en ``||loops: while-løkke||`` som er aktiv så lange  ``||pins: digital pin P1 = 0||``.
-
-Inni denne ``||loops: while-løkke||`` skal vi få skjermen på microbiten og Rearm LED til å blinke ved å stru ``||pins: P8||`` av (0) og på (1).
-
-```blocks
-let strip: neopixel.Strip = null
-function Rearm () {
-    strip.clear()
-    strip.show()
-    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
-        pins.digitalWritePin(DigitalPin.P8, 0)
-        basic.showLeds(`
-            . . . . .
-            . # # # .
-            . # . # .
-            . # # # .
-            . . . . .
-            `)
-        pins.digitalWritePin(DigitalPin.P8, 1)
-        basic.showLeds(`
-            . . . . .
-            . # # # .
-            . # # # .
-            . # # # .
-            . . . . .
-            `)
-    }
-}
-function Launch () {
-    if (Klar) {
-	    basic.showLeds(`
-        . . # . .
-        . # # # .
-        # . # . #
-        . . # . .
-        . . # . .
-        `)
-        radio.sendNumber(42)
-        Klar = false
-        Rearm()
-    }
-}
-```
-
-
-## Del 9.2: 
-
-### Rearm-funksjonen etter rearmeringen:
-
-Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
-
-Skriv ``||pins:digital pin P8 = 0||``, sett NeoPixels til ``||neopixel: Purple||`` og ``||basic: tøm skjermen||`` til microbiten.
-
-Avslutt med en ``||basic: pause||`` i 200 ms. før vi kaller opp funksjonen ``||functions: Initialize||`` for å restarte rakett-kofferten.
-
-```blocks
-let strip: neopixel.Strip = null
-function Rearm () {
-    strip.clear()
-    strip.show()
-    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
-        pins.digitalWritePin(DigitalPin.P8, 0)
-        basic.showLeds(`
-            . . . . .
-            . # # # .
-            . # . # .
-            . # # # .
-            . . . . .
-            `)
-        pins.digitalWritePin(DigitalPin.P8, 1)
-        basic.showLeds(`
-            . . . . .
-            . # # # .
-            . # # # .
-            . # # # .
-            . . . . .
-            `)
-    }
-    pins.digitalWritePin(DigitalPin.P8, 0)
-    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        `)
-    basic.pause(200)
-    Initialize()
-}
-function Initialize () {
-	
-}
-```
-
-
-
-## Del 11: 
+## Del 6.4: 
 
 ### Buzzer:
 
-For å varsle at raketten skal skytes opp, skal en buzzer bli skrudd på når vi alle systemene er på og armerte.
+For å varsle at raketten skal skytes opp, skal en buzzer bli skrudd på når alle systemene er på og armerte.
 
-For å få til dette må vi lage en liten ``||logic: Hvis-betingelse||`` som sier at ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) skal skrus på (settes til 1) når variabelen ``||variabel: Klar||`` er ``||logic: sann||``. Eller skal de skrus av (settes til 0).
+For å få til dette må vi lage en liten ``||logic: Hvis-betingelse||`` inne i ``||basic: gjenta for alltid||`` som sier at ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) skal skrus på (settes til 1) når variabelen ``||variabel: Klar||`` er ``||logic: sann||``. Eller skal de skrus av (settes til 0).
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -743,7 +641,7 @@ function StatusCheck () {
 }
 ```
 
-## Del 12: 
+## Del 6.5: 
 
 ### BuzzerBlink-funksjon:
 
@@ -793,9 +691,122 @@ function Rearm () {
 }
 ```
 
-## Del 13:
+## Del 6.6: 
 
-Gratulerer! Du er nå ferdig å programmere ControllerPAD! 
+### Rearm av kofferten:
+
+Når vi har sendt opp raketten vår, skal vi ikke få lov til å sende opp en ny rakett før arm-bryteren er skrudd av igjen og systemet er resatt. 
+
+For å gjøre dette må vi lage en ny funksjon: ``||functions: Rearm||``. Den skal kalles opp fra bunnen i ``||functions: Launch||``.
+
+Start med å skru av lysene til NeoPixels. Så skal vi lage en ``||loops: while-løkke||`` som er aktiv så lange  ``||pins: digital pin P1 = 0||``.
+
+Inni denne ``||loops: while-løkken||`` skal vi få skjermen på microbiten og Rearm LED til å blinke. Dette gjør vi ved å stru ``||pins: P8||`` AV (0) og PÅ (1), og få et leddlys på microbiten til å skru seg AV og PÅ.
+
+```blocks
+let strip: neopixel.Strip = null
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        pins.digitalWritePin(DigitalPin.P8, 1)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+}
+function Launch () {
+    if (Klar) {
+	    basic.showLeds(`
+        . . # . .
+        . # # # .
+        # . # . #
+        . . # . .
+        . . # . .
+        `)
+        radio.sendNumber(42)
+        Klar = false
+        Rearm()
+    }
+}
+```
+
+
+## Del 6.7: 
+
+### Rearm-funksjonen etter rearmeringen:
+
+Etter at arm-knappen er skrudd av, vil vi hoppe ut av ``||loops: while-løkken||``. 
+
+Skriv ``||pins:digital pin P8 = 0||``, sett NeoPixels til ``||neopixel: Purple||`` og ``||basic: tøm skjermen||`` til microbiten.
+
+Avslutt med en ``||basic: pause||`` i 200 ms. før vi kaller opp funksjonen ``||functions: Initialize||`` for å restarte rakett-kofferten.
+
+```blocks
+let strip: neopixel.Strip = null
+function Rearm () {
+    strip.clear()
+    strip.show()
+    while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
+            `)
+        pins.digitalWritePin(DigitalPin.P8, 1)
+        basic.showLeds(`
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
+            `)
+    }
+    pins.digitalWritePin(DigitalPin.P8, 0)
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(200)
+    Initialize()
+}
+function Initialize () {
+	
+}
+```
+
+## Del 7: @unplugged
+
+### Bytte Tutorial
+
+ControllerPAD er ferdig programmert!
+
+Bytt veiledning, og fullfør koden til LaunchPAD-kofferten!
+
+![Launch-PAD.jpg](https://i.postimg.cc/Sxhw0Mck/Launch-PAD.jpg)
+
+## Del 7:
+
+### Gratulerer! Du er nå ferdig å programmere ControllerPAD! 
 
 ``||math: Last ned||`` koden på en micro:bit og sjekk at den fungerer som den skal.
 
