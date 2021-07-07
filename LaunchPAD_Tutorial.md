@@ -567,6 +567,9 @@ function Launch () {
     }
     Oppskytning = false
 }
+function Rearm () {
+
+}
 ```
 
 ## Del 7.1: 
