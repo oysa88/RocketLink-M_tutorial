@@ -83,17 +83,23 @@ function Initialize () {
 
 ### Initialize funksjon:
 
-Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 5 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: IgniterCheck||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
-``||variable: SelfStatus||`` sjekker om kofferten er på, ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten, ``||variable: IgniterStatus||`` sjekker om ledningene er riktig koblet til tenneren i raketten, ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på, og ``||variable: Klar||`` sjekker om alle systemene på kofferten er på.
+Disse variablene utfører, og skal settes til:
 
-Sett alle disse 5 variablene til er være ``||logic: usann||``
+- ``||variable: SelfStatus||`` sjekker om kofferten er på. Settes til ``||logic: usann||``
+- ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten. Settes til ``||logic: usann||``
+- ``||variable: IgniterStatus||`` viser om ledningene er riktig koblet til tenneren i raketten. Settes til ``||logic: usann||``
+- ``||variable: IgniterCheck||`` utfører selve sjekken av ledningene. Settes til 0.
+- ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på. Settes til ``||logic: usann||``
+- ``||variable: Klar||`` sjekker om alle systemene på kofferten er på. Settes til ``||logic: usann||``
 
 | Variabel ||||| Status |
 |:---------|||||:------:|
 | SelfStatus ||||| Usann |
 | LinkStatus ||||| Usann |
 | IgniterStatus ||||| Usann |
+| IgniterCheck ||||| 0 |
 | ArmStatus ||||| Usann |
 | Klar ||||| Usann |
 
@@ -102,6 +108,7 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
+    IgniterCheck = 0
     ArmStatus = false
     Klar = false
 }
@@ -119,6 +126,7 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
+    IgniterCheck = 0
     ArmStatus = false
     Klar = false
     strip.showColor(neopixel.colors(NeoPixelColors.Purple))
@@ -141,6 +149,7 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
+    IgniterCheck = 0
     ArmStatus = false
     Klar = false
     strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
