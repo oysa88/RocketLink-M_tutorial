@@ -9,16 +9,32 @@
 
 I denne veiledningen skal vi gå igjennom hvordan man programmerer ControllerPAD-kofferten til RocketLink oppskytningssystem. 
 
-Vi skal sette opp radiokommunikasjon for å snakke med LauchPAD, for å finne ut om det er klart til å skyte opp raketten. Hvis alt er klart skal vi sende signal tilbake om å skyte opp raketten!
+Vi skal sette opp radiokommunikasjon for å snakke med LaunchPAD, for å finne ut om det er klart til å skyte opp raketten. Hvis alt er klart skal vi sende signal tilbake om å skyte opp raketten!
+
+Vi kommer til å hoppe mellom veiledningen for å programmere ControllerPAD og LaunchPAD. Du får beskjed når du skal bytte mellom veiledningene og når du skal teste koden underveis.
+
+Lykke til!
 
 ![Controller-PAD-500px.jpg](https://i.postimg.cc/1tjNfDMm/Controller-PAD-500px.jpg)
 
+## Del 1.2: 
+
+### Ved start - Lys
+
+I blokken ``||basic: ved start||`` skal vi sette opp de funksjonene som kun skal brukes når kofferten skrus på.
+
+Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
+
+Sett at digital pin (``||pins: P15||``) skal skrives til 1. (Dette er lyset på Status Check-knappen på kofferten.)
+
+```blocks
+let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
+pins.digitalWritePin(DigitalPin.P15, 1)
+```
 
 ## Del 1.1: 
 
-### Ved start - radio
-
-I blokken ``||basic: ved start||`` skal vi sette opp de funksjonene som kun skal brukes når kofferten skrus på.
+### Ved start - Radio
 
 Det første vi skal sette opp er en ``||radio: radiogruppe||``. Dere kan velge et tall mellom 0 og 255. (Bruker gr. 1 som eksempel her.) 
 
@@ -26,18 +42,6 @@ NB: Viktig at man velger samme ``||radio: radiogruppe||`` på begge koffertene!
 
 Sett også opp at ``||radio: sendereffekt||`` skal være lik 7. (Gir oss sterkere radiosender.)
 
-```blocks
-radio.setGroup(1)
-radio.setTransmitPower(7)
-```
-
-## Del 1.2: 
-
-### Ved start - resten
-
-Sett opp NeoPixels for kofferten. Skal være 5 NeoPixels på ``||pins: P0||``.
-
-Sett at digital pin (``||pins: P15||``) skal skrives til 1. (Dette er lyset på Status Check-knappen på kofferten.)
 
 ```blocks
 let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)

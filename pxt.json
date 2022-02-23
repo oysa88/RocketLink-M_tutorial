@@ -1,6 +1,6 @@
 {
     "name": "RocketLink-M Tuorials",
-    "version": "3.1.1",
+    "version": "4.0.2",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -21,6 +21,10 @@
     "testFiles": [
         "test.ts"
     ],
+    "targetVersions": {
+        "target": "4.0.17",
+        "targetId": "microbit"
+    },
     "supportedTargets": [
         "microbit"
     ],

@@ -11,10 +11,6 @@ I denne veiledningen skal vi gå igjennom hvordan man programmerer LaunchPAD-kof
 
 Vi skal sette opp radiokommunikasjon for å snakke med ControllerPAD, for å si ifra om det er klart til å skyte opp raketten. Hvis alt er klart, kan kofferten motta signal om å skyte opp raketten!
 
-Vi kommer til å hoppe mellom veiledningen for å programmere LaunchPAD og ControllerPAD. Du får beskjed når du skal bytte mellom veiledningene og når du skal teste koden underveis.
-
-Lykke til!
-
 ![Launch-PAD-500px.jpg](https://i.postimg.cc/fySSXkgx/Launch-PAD-500px.jpg)
 
 
