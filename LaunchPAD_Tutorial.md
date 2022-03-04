@@ -576,7 +576,7 @@ Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp.
 
 Skriv ``||pins: digital pin P16||`` til HØY (1) i 500 ms. før den skrives LAV (0) igjen.
 
-Helt i bunn, utenfor ``||logic: Hvis-betingelse||``, skal vi sette ``||variabel: Oppskytning||`` til å være ``||logic: usann||``.
+Helt til slutt skal vi sette ``||variabel: Oppskytning||`` til å være ``||logic: usann||``. Den skal plasseres inn i funksjonen ``||functions: Initialize ||``.
 
 ```blocks
 function Launch () {
@@ -593,10 +593,48 @@ function Launch () {
         pins.digitalWritePin(DigitalPin.P16, 0)
         Rearm()
     }
-    Oppskytning = false
 }
 function Rearm () {
 
+}
+function Initialize () {
+	SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Klar = false
+    Oppskytning = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
+    basic.showLeds(`
+    . . . . .
+    . . . . .
+    . . # . .
+    . . . . .
+    . . . . .
+    `)
+    basic.showLeds(`
+    . . . . .
+    . # # # .
+    . # . # .
+    . # # # .
+    . . . . .
+    `)
+    basic.showLeds(`
+    # # # # #
+    # . . . #
+    # . . . #
+    # . . . #
+    # # # # #
+    `)
+    basic.showLeds(`
+    # . . . #
+    # # . # #
+    # . # . #
+    # . . . #
+    # . . . #
+    `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    basic.pause(200)
 }
 ```
 
