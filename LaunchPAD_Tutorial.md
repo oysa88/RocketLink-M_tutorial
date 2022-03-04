@@ -37,7 +37,7 @@ radio.setTransmitPower(7)
 
 ### Ved start - resten:
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 4 NeoPixels på ``||pixels: digital pin P0||``.
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 4 NeoPixels på ``||neopixel: digital pin P0||``.
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 
