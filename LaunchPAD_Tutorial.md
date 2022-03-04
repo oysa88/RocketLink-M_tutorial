@@ -527,7 +527,7 @@ Nå skal alle systemene på begge koffertene fungere, og vi er klare for å bygg
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
 - Vi trenger også en ny variabel: ``||variabel: Oppskytning||``.
-- I ``||basic: når radio mottar receivedNumber||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at ``||variabel: Oppskytning||`` er ``||logic: sann||`` hvis ``||radio: receivedNumber = 42||``.
+- I ``||radio: når radio mottar receivedNumber||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at ``||variabel: Oppskytning||`` er ``||logic: sann||`` hvis ``||radio: receivedNumber = 42||``.
 - I ``||basic: gjenta for alltid||`` skal vi sjekke om ``||variabel: Oppskytning||`` er ``||logic: sann||`` eller ikke. Hvis ``||variabel: Oppskytning||`` er ``||logic: sann||``, skal vi kalle opp funksjonen ``||functions: Launch||``.
 
 ```blocks
