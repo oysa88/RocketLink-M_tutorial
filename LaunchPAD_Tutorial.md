@@ -83,14 +83,13 @@ function Initialize () {
 
 ### Initialize funksjon:
 
-Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: IgniterCheck||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatus||``, ``||variable: ArmStatus||`` og ``||variable: Klar||``.
 
 Disse variablene utfører, og skal settes til:
 
 - ``||variable: SelfStatus||`` sjekker om kofferten er på. Settes til ``||logic: usann||``
 - ``||variable: LinkStatus||`` sjekker om det er kontakt med den andre kofferten. Settes til ``||logic: usann||``
 - ``||variable: IgniterStatus||`` viser om ledningene er riktig koblet til tenneren i raketten. Settes til ``||logic: usann||``
-- ``||variable: IgniterCheck||`` utfører selve sjekken av ledningene. Settes til 0.
 - ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på. Settes til ``||logic: usann||``
 - ``||variable: Klar||`` sjekker om alle systemene på kofferten er på. Settes til ``||logic: usann||``
 
@@ -99,7 +98,6 @@ Disse variablene utfører, og skal settes til:
 | SelfStatus ||||| Usann |
 | LinkStatus ||||| Usann |
 | IgniterStatus ||||| Usann |
-| IgniterCheck ||||| 0 |
 | ArmStatus ||||| Usann |
 | Klar ||||| Usann |
 
@@ -108,7 +106,6 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
-    IgniterCheck = 0
     ArmStatus = false
     Klar = false
 }
@@ -126,7 +123,6 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
-    IgniterCheck = 0
     ArmStatus = false
     Klar = false
     strip.showColor(neopixel.colors(NeoPixelColors.Purple))
@@ -149,7 +145,6 @@ function Initialize () {
 	SelfStatus = false
     LinkStatus = false
     IgniterStatus = false
-    IgniterCheck = 0
     ArmStatus = false
     Klar = false
     strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
@@ -273,7 +268,7 @@ For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer,
 
 Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
 
-Når vi kjører ``||variable: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Når vi kjører ``||functions: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
@@ -346,7 +341,7 @@ For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten
 
 Inni her skal vi lage en  ``||loops: while-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
 
-Inni ``||loops: while-løkken||`` skal vi send tallet 10 med radio. 
+Inni ``||loops: while-løkken||`` skal vi send tallet 11 med radio. 
 
 Nå skal vi sjekke om den ene av koffertene ikke mottar et signal på 3x ``||variabel: oppdateringsfrekvens||``. Hvis den er lengre enn det, kan den regne med at den andre kofferten er skrudd av.
 
@@ -391,7 +386,7 @@ LaunchPAD skal sende statusen til igniteren og arm-knappen til ControllerPAD. I 
 
 ### StatusCheck - variabler:
 
-Videre skal vi finne ut status på ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``. 
+Videre skal vi finne ut status på ``||variable: IgniterStatus||`` og ``||variable: ArmStatus||``. Dette skal legges inn i funksjonen ``||functions: StatusCheck||``
 
 - Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variable: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
 - Hvis ``||variable: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
@@ -712,7 +707,6 @@ function Initialize () {
 let Klar = false
 let ArmStatus = false
 let IgniterStatus = false
-let IgniterCheck = 0
 let SelfStatus = false
 let Oppskytning = false
 let sistSettAktiv = 0
@@ -768,7 +762,12 @@ basic.forever(function () {
     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
         strip.showColor(neopixel.colors(NeoPixelColors.Red))
         pins.digitalWritePin(DigitalPin.P14, 1)
-        IgniterCheck = pins.digitalReadPin(DigitalPin.P2)
+        if (pins.digitalReadPin(DigitalPin.P2) == 1) {
+            IgniterStatus = true
+            }
+        else {
+            IgniterStatus = false
+            }
         basic.pause(200)
         pins.digitalWritePin(DigitalPin.P14, 0)
     }
@@ -788,11 +787,9 @@ radio.onReceivedNumber(function (receivedNumber) {
 })
 function StatusCheck () {
     SelfStatus = true
-    if (IgniterCheck == 1) {
-        IgniterStatus = true
+    if (IgniterStatus) {
         radio.sendNumber(21)
     } else {
-        IgniterStatus = false
         radio.sendNumber(22)
     }
     if (pins.digitalReadPin(DigitalPin.P1) == 1) {

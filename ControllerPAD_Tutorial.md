@@ -294,7 +294,7 @@ For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer,
 
 Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
 
-Når vi kjører gjennom ``||function: StatusCheck||``, vet vi at variabelen``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
@@ -375,7 +375,7 @@ For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten
 
 Inni her skal vi lage en  ``||loops: while-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
 
-Inni ``||loops: while-løkken||`` skal vi send tallet 10 med radio. 
+Inni ``||loops: while-løkken||`` skal vi send tallet 11 med radio. 
 
 Nå skal vi sjekke om den ene av koffertene ikke mottar et signal på 3x ``||variabel: oppdateringsfrekvens||``. Hvis den er lengre enn det, kan den regne med at den andre kofferten er skrudd av.
 
