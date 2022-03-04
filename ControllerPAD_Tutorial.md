@@ -294,7 +294,7 @@ For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer,
 
 Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
 
-Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks

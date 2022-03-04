@@ -390,7 +390,7 @@ Videre skal vi finne ut status på ``||variable: IgniterStatus||`` og ``||variab
 
 - Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variable: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
 - Hvis ``||variable: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
-- Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||`` og vi skal sende en ``||radio: radio send tall = 31||`` til ControllerPAD. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||`` og vi skal sende en ``||radio: radio send tall = 32||`` til ControllerPAD.
+- Hvis ``||pins: P1||`` er lik 1, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||`` og vi skal sende en ``||radio: radio send tall = 31||`` til ControllerPAD. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||`` og vi skal sende en ``||radio: radio send tall = 32||`` til ControllerPAD.
 
 ```blocks
 function StatusCheck () {
@@ -400,7 +400,7 @@ function StatusCheck () {
     } else {
         radio.sendNumber(22)
     }
-    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
         ArmStatus = true
         radio.sendNumber(31)
     } else {
