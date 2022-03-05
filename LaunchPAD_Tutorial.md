@@ -270,10 +270,13 @@ Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
 
 Når vi kjører ``||functions: StatusCheck||``, vet vi at ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
+For å gi blokken ``||basic: Gjenta for alltid||`` litt pusteromnår den jobber, legg inn en liten ``||basic: pause ||`` på 100ms på slutten.
+
 
 ```blocks
 basic.forever(function () {
     StatusCheck()
+    basic.pause(100)
 })
 function StatusCheck () {
 	SelfStatus = true
@@ -331,6 +334,10 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 let oppdateringsfrekvens = 200
+Initialize()
+function Initialize () {
+	
+}
 ```
 
 ## Del 4.3: 
@@ -442,6 +449,7 @@ basic.forever(function () {
         basic.pause(200)
         pins.digitalWritePin(DigitalPin.P14, 0)
     }
+    basic.pause(100)
 })
 function StatusCheck () {
 	
@@ -556,6 +564,7 @@ basic.forever(function () {
     if (Oppskytning) {
         Launch()
     }
+    basic.pause(100)
 })
 function StatusCheck () {
 	
@@ -579,6 +588,7 @@ Skriv ``||pins: digital pin P16||`` til HØY (1) i 500 ms. før den skrives LAV 
 Helt til slutt skal vi sette ``||variabel: Oppskytning||`` til å være ``||logic: usann||``. Den skal plasseres inn i funksjonen ``||functions: Initialize ||``.
 
 ```blocks
+let strip: neopixel.Strip = null
 function Launch () {
     if (Klar) {
         basic.showLeds(`
@@ -604,7 +614,7 @@ function Initialize () {
     ArmStatus = false
     Klar = false
     Oppskytning = false
-    strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
     basic.showLeds(`
     . . . . .
     . . . . .

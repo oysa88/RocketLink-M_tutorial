@@ -364,6 +364,10 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 let oppdateringsfrekvens = 200
+Initialize()
+function Initialize () {
+	
+}
 ```
 
 
@@ -532,6 +536,8 @@ Vi ønsker å kjøre en systemsjekk hver gang vi trykker ned knappen til System 
 
 Så hvis ``||pins: P5 = 0||``, skal alle NeoPixels bli ``||neopixel: røde||`` i 100 ms, og så skal vi kalle opp funksjonen ``||functions: StatusCheck||``.
 
+For å gi blokken ``||basic: Gjenta for alltid||`` litt pusteromnår den jobber, legg inn en liten ``||basic: pause ||`` på 100ms på slutten.
+
 ```blocks
 let strip: neopixel.Strip = null
 basic.forever(function () {
@@ -541,6 +547,7 @@ basic.forever(function () {
         basic.pause(100)
         StatusCheck()
     }
+    basic.pause(100)
 })
 function StatusCheck () {
 	
@@ -562,7 +569,7 @@ Nå skal alle systemene på begge koffertene fungere, og vi er klare for å bygg
 
 For å kunne skyte opp raketten, trenger vi å lage en ny funksjonen som vi kaller ``||functions: Launch||``. 
 
-I ``||basic: gjenta for alltid||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at vi skal kalle opp funksjonen ``||functions: Launch||`` hvis ``||pins: skriver digital pin P11 = 0||``. 
+I ``||basic: gjenta for alltid||`` skal vi lage en ``||logic: Hvis-betingelse||`` som sier at vi skal kalle opp funksjonen ``||functions: Launch||`` hvis ``||pins: skriver digital pin P11 = 0||``(Launch-knappen). 
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -576,6 +583,7 @@ basic.forever(function () {
     if (pins.digitalReadPin(DigitalPin.P11) == 0) {
         Launch()
     }
+    basic.pause(100)
 })
 function StatusCheck () {
 	
@@ -628,6 +636,9 @@ basic.forever(function () {
         basic.pause(100)
         StatusCheck()
     }
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
     if (Klar) {
         pins.digitalWritePin(DigitalPin.P13, 1)
         pins.digitalWritePin(DigitalPin.P14, 1) 
@@ -635,8 +646,12 @@ basic.forever(function () {
         pins.digitalWritePin(DigitalPin.P13, 0)
         pins.digitalWritePin(DigitalPin.P14, 0)
     }
+    basic.pause(100)
 })
 function StatusCheck () {
+	
+}
+function Launch () {
 	
 }
 ```
