@@ -16,7 +16,9 @@
         "MaaKrav_ControllerPAD_Tutorial.md",
         "MaaKrav_LaunchPAD_Tutorial.md",
         "ControllerPAD_Tutorial.md",
-        "LaunchPAD_Tutorial.md"
+        "LaunchPAD_Tutorial.md",
+        "ControllerPAD_Kravspec.md",
+        "LaunchPAD_Kravspec.md"
     ],
     "testFiles": [
         "test.ts"
