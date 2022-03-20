@@ -84,9 +84,9 @@ function Initialize () {
 
 ### Initialize funksjon:
 
-Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||``, ``||variable: IgniterStatusLP||``, ``||variable: ArmStatusLP||`` og ``||variable: Klar||``.
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: ArmStatus||``, ``||variables: IgniterStatusLP||``, ``||variables: ArmStatusLP||`` og ``||variables: Klar||``.
 
-``||variable: SelfStatus||`` sjekker om kofferten er på, ``||variable: LinkStatus||`` sjekker om det er kontakt med LaunchPAD, ``||variable: ArmStatus||`` sjekker om Arm-knappen er skrudd på, ``||variable: IgniterStatusLP||`` sjekker om raketten er koblet riktig til LaunchPAD, ``||variable: ArmStatusLP||`` sjekker om Arm-knappen er aktivert på LaunchPAD og ``||variable: Klar||`` sjekker om alle systemene på kofferten er på.
+``||variables: SelfStatus||`` sjekker om kofferten er på, ``||variables: LinkStatus||`` sjekker om det er kontakt med LaunchPAD, ``||variables: ArmStatus||`` sjekker om Arm-knappen er skrudd på, ``||variables: IgniterStatusLP||`` sjekker om raketten er koblet riktig til LaunchPAD, ``||variables: ArmStatusLP||`` sjekker om Arm-knappen er aktivert på LaunchPAD og ``||variables: Klar||`` sjekker om alle systemene på kofferten er på.
 
 Sett alle disse 6 variablene til er være ``||logic: usann||``. 
 
@@ -237,7 +237,7 @@ Den skal sjekke ett og ett system av gangen, og teste hvert system når det er f
 
 Vi skal bruke en ny funksjon, ``||functions: NeoPixels||``, for å vise hvilken status de forskjellige systemene på kofferten har. Denne skal kalles opp fra bunn av ``||functions: StatusCheck||``.
 
-Vi skal inidividuelt sjekke opp variablene: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: IgniterStatusLP||``, ``||variable: ArmStatusLP||`` og ``||variable: Klar||``.
+Vi skal inidividuelt sjekke opp variablene: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatusLP||``, ``||variables: ArmStatusLP||`` og ``||variables: Klar||``.
 
 Lag 5 ``||logic: Hvis-betingelser||`` med ``||logic: Ellers hvis||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
 
@@ -294,7 +294,7 @@ For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer,
 
 Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
 
-Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen ``||variable: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen ``||variables: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
@@ -337,11 +337,11 @@ Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sie
 
 ### Sjekke om radio-kommunikasjon funker:
 
-Lag en ny variabel: ``||variable: sistSettAktiv||``. 
+Lag en ny variabel: ``||variables: sistSettAktiv||``. 
 
-Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``,sett ``||variable: LinkStatus||`` til ``||logic: sann||`` og ``||variable: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
+Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``,sett ``||variables: LinkStatus||`` til ``||logic: sann||`` og ``||variables: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
 
-I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variable: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variable: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
+I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variables: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variables: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
@@ -356,7 +356,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ### Lage en oppdateringsfrekvens:
 
-Lag en variabel som du kaller ``||variable: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
+Lag en variabel som du kaller ``||variables: oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
 
 ```blocks
 let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
@@ -412,7 +412,7 @@ control.inBackground(function () {
 
 ### Bytte Tutorial
 
-Vi må bygge funksjonen for ``||variable: LinkStatus||`` på LaunchPAD for å kunne teste den.
+Vi må bygge funksjonen for ``||variables: LinkStatus||`` på LaunchPAD for å kunne teste den.
 
 Bytt veiledning, og fortsett å lage koden til LaunchPAD-kofferten!
 
@@ -473,7 +473,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 Videre inni ``||function: StatusCheck||``, lag en ``||logic: hvis-betingelse||`` som skal lese av ``||pins: P1||`` (Arm-knappen). 
 
-- Hvis ``||pins: P1||`` er lik 0, skal ``||variable: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variable: ArmStatus||`` settes til ``||logic: usann||``.
+- Hvis ``||pins: P1||`` er lik 0, skal ``||variables: ArmStatus||`` settes til ``||logic: sann||``. Ellers skal ``||variables: ArmStatus||`` settes til ``||logic: usann||``.
 
 ```blocks
 function StatusCheck () {
@@ -492,9 +492,9 @@ function StatusCheck () {
 
 For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i funksjonen ``||functions: StatusCheck||``.
 
-Vi skal sjekke: ``||variable: SelfStatus||``, ``||variable: LinkStatus||``, ``||variable: ArmStatus||``, ``||variable: IgniterStatusLP||`` og ``||variable: ArmStatusLP||``.
+Vi skal sjekke: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: ArmStatus||``, ``||variables: IgniterStatusLP||`` og ``||variables: ArmStatusLP||``.
 
-Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variable: Klar||`` settes lik ``||logic: sann||``. Eller lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variabel: Klar||`` er ``||logic: sann||`` eller ikke.
+Hvis alle statusene over er lik``||logic: sann||``, da skal ``||variables: Klar||`` settes lik ``||logic: sann||``. Eller lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variabel: Klar||`` er ``||logic: sann||`` eller ikke.
 
 ```blocks
 function StatusCheck () {

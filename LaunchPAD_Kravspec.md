@@ -21,7 +21,7 @@ Lykke til!
 
 ## Del 1.1: 
 
-### Ved start - radio
+### Må: Ved start - radio
 
 I blokken ``||basic: ved start||`` skal vi sette opp de funksjonene som kun skal brukes når kofferten skrus på.
 
@@ -36,7 +36,7 @@ radio.setTransmitPower(7)
 
 ## Del 1.2:
 
-### Sjekke ArmStatus på kofferten
+### Må: Sjekke ArmStatus på kofferten
 
 Inni ``||basic: Gjenta for alltid||``:
 
@@ -56,7 +56,7 @@ basic.forever(function on_forever() {
 
 ## Del 1.2:
 
-### Skyte opp raketten! @diffs true
+### Må: Skyte opp raketten! @diffs true
 
 Raketten skal sendes opp når ``||radio: radio mottar receivedNumber = 42 ||``.
 
@@ -75,7 +75,7 @@ function Launch () {
 }
 ```
 
-## Del 1.3:
+## Må: Del 1.3:
 
 ### Oppskytningssekvensen @diffs true
 
@@ -99,7 +99,7 @@ function Launch () {
 
 ## Del 1.4:
 
-### Rearmere kofferten før ny oppskytning @diffs true
+### Må: Rearmere kofferten før ny oppskytning @diffs true
 
 Kofferten får ikke skyte opp en ny rakett før den er rearmert. (Armeringsbryteren må skrus AV.)
 
@@ -129,4 +129,29 @@ function Launch () {
         }
     }
 }
+```
+
+## Del 1.5:
+
+### Teste Oppskytningssekvensen!
+
+``||math: Last ned||`` koden til begge koffertene og sjekk at oppstartsekvensen fungerer som den skal.
+
+
+## Del 1.6: @unplugged
+
+### Bytte Tutorial
+
+Gratulerer! Vi er nå ferdige med å lage MÅ-koden på ControllerPAD!
+
+Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
+
+![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
+
+
+
+
+
+```package
+neopixel=github:microsoft/pxt-neopixel#v0.7.3
 ```
