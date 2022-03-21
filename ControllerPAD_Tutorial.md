@@ -667,7 +667,6 @@ Så hvis ``||pins: P5 = 0||``, skal alle NeoPixels bli ``||neopixel: røde||`` i
 For å gi blokken ``||basic: Gjenta for alltid||`` litt pusterom når den jobber, legg inn en liten ``||basic: pause ||`` på 100ms på slutten.
 
 ```blocks
-let strip: neopixel.Strip = null
 basic.forever(function () {
     StatusCheck()
     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
@@ -705,6 +704,7 @@ function StatusCheck () {
     }
     NeoPixels()
 }
+let strip: neopixel.Strip = null
 function NeoPixels () {
     if (SelfStatus) {
         strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
@@ -733,6 +733,7 @@ function NeoPixels () {
     }
     strip.show()
 }
+
 ```
 
 ## Del 6: @unplugged
