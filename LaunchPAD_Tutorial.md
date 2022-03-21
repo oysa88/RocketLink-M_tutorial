@@ -359,8 +359,44 @@ radio.setTransmitPower(7)
 pins.digitalWritePin(DigitalPin.P15, 1)
 let Oppdateringsfrekvens = 200
 Initialize()
+let strip: neopixel.Strip = null
 function Initialize () {
-	
+	SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Klar = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
+    basic.showLeds(`
+    . . . . .
+    . . . . .
+    . . # . .
+    . . . . .
+    . . . . .
+    `)
+    basic.showLeds(`
+    . . . . .
+    . # # # .
+    . # . # .
+    . # # # .
+    . . . . .
+    `)
+    basic.showLeds(`
+    # # # # #
+    # . . . #
+    # . . . #
+    # . . . #
+    # # # # #
+    `)
+    basic.showLeds(`
+    # . . . #
+    # # . # #
+    # . # . #
+    # . . . #
+    # . . . #
+    `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    basic.pause(200)
 }
 ```
 
@@ -472,9 +508,9 @@ function NeoPixels () {
 
 Inne i ``||basic: Gjenta for alltid||`` skal vi lage funksjonen som tester om igniteren er koblet riktig til raketten.
 
-For å sjekke dette, må vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, settes ``|pins: digital pin P5 ||`` til 0.
+For å sjekke dette, må vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, settes ``||pins: digital pin P5 ||`` til 0.
 
-Inni ``||logic: hvis||`` ``||pins: digital pin P5 ||`` ``||logic: = 0 ||``:
+Inni ``||logic: hvis||`` ``||pins: digital pin P5 ||`` = 0:
 
 - Start med å sette alle NeoPixelene til ``||neopixel: rød||``.
 - For å kunne lese av ``||pins: digital pin P2||`` (Ignitersjekk), må vi skrive ``||pins: digital pin P14||`` (Ignitersjekk-sikkerhet) til HØY (1) i 200 ms før den skrives til LAV (0) igjen. Mens ``||pins: P14||`` er HØY skal vi lese av ``||pins: digital pin P2||``. 
@@ -516,7 +552,6 @@ function StatusCheck () {
     }
     NeoPixels()
 }
-let strip: neopixel.Strip = null
 function NeoPixels () {
     if (SelfStatus) {
         strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
@@ -717,7 +752,6 @@ function StatusCheck () {
     }
     NeoPixels()
 }   
-let strip: neopixel.Strip = null
 function NeoPixels () {
     if (SelfStatus) {
         strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
@@ -748,7 +782,7 @@ function NeoPixels () {
 
 ### Sende opp raketten!
 
-Koden inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variables: Klar||`` er ``||logic: sann||``.
+Koden inne i ``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variables: Klar||`` er ``||logic: sann||``.
 
 Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp.
 
