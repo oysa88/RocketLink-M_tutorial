@@ -335,6 +335,7 @@ function NeoPixels () {
     }
     strip.show()
 }
+
 ```
 
 ## Del 3.3:
