@@ -705,7 +705,6 @@ function StatusCheck () {
     }
     NeoPixels()
 }
-let strip: neopixel.Strip = null
 function NeoPixels () {
     if (SelfStatus) {
         strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
