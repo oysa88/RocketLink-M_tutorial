@@ -1118,7 +1118,6 @@ function Rearm () {
     basic.pause(200)
     Initialize()
 }
-let strip: neopixel.Strip = null
 let SelfStatus = false
 let LinkStatus = false
 let ArmStatus = false
