@@ -386,7 +386,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ## Del 4.2: 
 
-### Lage en oppdateringsfrekvens: @diffs true
+### Lage en oppdateringsfrekvens:
 
 Lag en variabel som du kaller ``||variables: Oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200ms.
 
