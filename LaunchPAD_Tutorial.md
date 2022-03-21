@@ -353,9 +353,9 @@ radio.onReceivedNumber(function (receivedNumber) {
 Lag en variabel som du kaller ``||variables: Oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200 ms.
 
 ```blocks
-let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 radio.setGroup(1)
 radio.setTransmitPower(7)
+let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
 pins.digitalWritePin(DigitalPin.P15, 1)
 let Oppdateringsfrekvens = 200
 Initialize()
