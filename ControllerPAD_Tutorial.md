@@ -660,7 +660,7 @@ function NeoPixels () {
 
 Inni ``||basic: Gjenta for alltid||``:
 
-Vi ønsker å kjøre en systemsjekk hver gang vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, kan vi ``|pins: lese digitalverdi fra  P5||`` lik 0. 
+Vi ønsker å kjøre en systemsjekk hver gang vi trykker ned knappen til System Status Check på kofferten. Når knappen trykkes ned, kan vi ``||pins: lese digitalverdi fra  P5||`` lik 0. 
 
 Så hvis ``||pins: P5 = 0||``, skal alle NeoPixels bli ``||neopixel: røde||`` i 100 ms, og så skal vi kalle opp funksjonen ``||functions: StatusCheck||``.
 
@@ -836,7 +836,7 @@ Når vi har trykket på Launch-knappen og satt ``||pins: skriver digital pin P11
 
 Launch-kommandoen inne i``||functions: Launch||`` skal kun få lov til å bli utført hvis ``||variables: Klar||`` er ``||logic: sann||``.
 
-Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp. Du må også sende en egen ``||radio: radio send tall||`` til LaunchPAD-kofferten. Vel et tall som ikke kan misforstås. Til slutt skal ``||variables: Klar||`` settes til ``||logic: usann||``.
+Lag en pil på skjermen til microbiten for å vise at raketten blir skutt opp. Du må også sende e egen ``||radio: radio send tall||`` til LaunchPAD-kofferten. Vel et tall som ikke kan misforstås. Til slutt skal ``||variables: Klar||`` settes til ``||logic: usann||``.
 
 ```blocks
 function Launch () {
@@ -863,7 +863,6 @@ For å varsle at raketten er klar til å skytes opp, skal en buzzer bli skrudd p
 For å få til dette må vi lage en liten ``||logic: hvis-betingelse||`` inne i ``||basic: gjenta for alltid||`` som sier at ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) skal skrus på (settes til 1) når variabelen ``||variables: Klar||`` er ``||logic: sann||``. Eller skal de skrus av (settes til 0).
 
 ```blocks
-let strip: neopixel.Strip = null
 basic.forever(function () {
     StatusCheck()
     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
