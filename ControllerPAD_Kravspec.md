@@ -162,7 +162,7 @@ Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
 
 ## Del 2.1:
 
-### Bør: Sette opp lysene på kofferten @diffs true
+### Bør: Sette opp lysene på kofferten
 
 For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 5 NeoPixels på ``||pins: digital pin P0||``.
 
@@ -177,25 +177,182 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 ## Del 2.2:
 
-### Bør: StatusCheck
+### Bør: SelfStatus
 
-For at systemet vårt hele tiden skal sjekke om det skjer noen status-endringer, trenger vi å lage en ny funksjon: ``||functions: StatusCheck||``.
+Øverst i ``||basic: gjenta for alltid||``.
 
-Denne funksjonen skal kalles opp fra ``||basic: gjenta for alltid||``.
-
-Når vi kjører gjennom ``||functions: StatusCheck||``, vet vi at variabelen ``||variables: SelfStatus||`` er ``||logic: sann||``. (Kofferten er jo på...)
+Her skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
-basic.forever(function () {
-    StatusCheck()
+basic.forever(function on_forever() {
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        ArmStatus = true
+        pins.digitalWritePin(DigitalPin.P13, 1)
+    } else {
+        ArmStatus = false
+        pins.digitalWritePin(DigitalPin.P13, 0)
+    } 
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
 })
-function StatusCheck () {
-    SelfStatus = true
+function Launch () {
+    if (ArmStatus) {
+        radio.sendNumber(42)
+        pins.digitalWritePin(DigitalPin.P13, 0)
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
+        }
+    }
 }
 ```
 
+## Del 2.3: @unplugged
 
+### Sjekke Linkstatus mellom rakettkoffertene
+
+For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
+
+Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sier «Hei, jeg er ikke avskrudd». Men vi trenger noe som sier ifra hvis det har gått for lang tid siden sist vi fikk en radiomelding fra den andre kofferten.
+
+![Radio-mellom-rakettkoffertene.gif](https://i.postimg.cc/nL4Rtr4R/Radio-mellom-rakettkoffertene.gif)
+
+
+## Del 2.4: 
+
+### Lage en oppdateringsfrekvens
+
+Lag en variabel som du kaller ``||variables: Oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200ms.
+
+```blocks
+radio.setGroup(1)
+radio.setTransmitPower(7)
+let strip = neopixel.create(DigitalPin.P0, 5, NeoPixelMode.RGB)
+pins.digitalWritePin(DigitalPin.P15, 1)
+let Oppdateringsfrekvens = 200
+```
+
+## Del 2.5: 
+
+### Bør: Motta radio-melding fra LaunchPAD
+
+Lag en ny variabel: ``||variables: sistSettAktiv||``. 
+
+Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``,sett ``||variables: LinkStatus||`` til ``||logic: sann||`` og ``||variables: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
+
+I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variables: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variables: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
+
+```blocks
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 11){
+        LinkStatus = true
+        sistSettAktiv = input.runningTime()
+    }
+})
+```
+
+## Del 2.6: 
+
+### Bør: Sjekke om den andre kofferten er skrudd av
+
+For å finne ut om kofferten har sluttet å motta signal fra den andre kofferten, må vi lage en liten sjekk som vi setter inn i  ``||control: kjør i bakgrunnen||``. (Finner du i menuen: Styring)
+
+Inni her skal vi bruke en  ``||loops: gjenta hvis sann-løkke||``. Denne løkken vil kjøre så lenge kofferten er på.
+
+Inni ``||loops: gjenta hvis sann||`` skal vi send tallet 11 med radio. 
+
+Nå skal vi sjekke om den ene av koffertene ikke mottar et signal på 3x ``||variables: Oppdateringsfrekvens||``. Hvis den er lengre enn det, kan den regne med at den andre kofferten er skrudd av.
+
+Vi skal sjekke om ``||input: kjøretid (ms)||`` minus (-) ``||variables: sistSettAktiv||`` er større enn (>) 3x ``||variables: Oppdateringsfrekvens||``
+
+Hvis dette er sant, skal: 
+
+-  ``||variables: LinkStatus||`` settes til ``||logic: usann||``
+
+Utenfor ``||logic: hvis-betingelsen||``, avslutt med en ``||basic: pause||`` lik ``||variables: Oppdateringsfrekvens||``.
+
+
+```blocks
+control.inBackground(function () {
+    while (true) {
+        radio.sendNumber(11)
+        if (input.runningTime() - sistSettAktiv > 3 * Oppdateringsfrekvens) {
+            LinkStatus = false
+        }
+    basic.pause(oppdateringsfrekvens)
+    }
+})
+```
+
+## Del 2.7:
+
+### Bør: Sette opp status på NeoPixelene
+
+Vi skal bruke en ny funksjon, ``||functions: NeoPixels||``, for å vise hvilken status de forskjellige systemene på kofferten har. 
+
+Vi skal inidividuelt sjekke opp variablene: ``||variables: SelfStatus||``, ``||variables: LinkStatus||`` og ``||variables: ArmStatus||``.
+
+Lag 3 ``||logic: Hvis-betingelser||`` med ``||logic: Ellers hvis||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
+
+Avslutt med å vise lysene: ``||neopixel: show||``
+
+Kjør ``||functions: NeoPixels||`` fra nederst i ``||basic: gjenta for alltid||``.
+
+| Variabel ||||| NeoPixel nr. |
+|:---------|||||:------:|
+| SelfStatus ||||| 0 |
+| LinkStatus ||||| 1 |
+| ArmStatus ||||| 4 |
+
+
+```blocks
+let strip: neopixel.Strip = null
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatus) {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
+    }
+}
+basic.forever(function () {
+    SelfStatus = true
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        ArmStatus = true
+    } else {
+        ArmStatus = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
+    NeoPixels()
+})
+function Launch () {
+    if (ArmStatus) {
+        radio.sendNumber(42)
+        pins.digitalWritePin(DigitalPin.P13, 1)
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
+        }
+    }
+}
+```
 
 
 
