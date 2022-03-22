@@ -88,9 +88,13 @@ function Launch () {
 
 ## Må: Del 1.3:
 
-### Oppskytningssekvensen @diffs true
+### oppskytningssekvensen
 
-Inni ``||functions: Launch ||`` skal vi utføre oppskytningssekvensen. Men den får fun lov til å bli utført ``||logic: hvis ||`` ``||variables: ArmStatus ||`` er ``||logic: sann ||``.
+Inni ``||functions: Launch ||``:
+
+Start med å sette ``||variables: Oppskytning ||`` til ``||logic: usann ||``
+
+Oppskytningssekvensen får kun lov til å bli utført ``||logic: hvis ||`` ``||variables: ArmStatus ||`` er ``||logic: sann ||``.
 
 Så ``||logic: hvis ||`` ``||variables: ArmStatus ||`` er ``||logic: sann ||``: 
 
@@ -100,6 +104,7 @@ Så ``||logic: hvis ||`` ``||variables: ArmStatus ||`` er ``||logic: sann ||``:
 
 ```blocks
 function Launch () { 
+    Oppskytning = false
     if (ArmStatus) {
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
@@ -118,6 +123,7 @@ Så for å "låse" kofferten etter at Launch-kommandoen er sendt, bruk en ``||lo
 
 ```blocks
 function Launch () { 
+    Oppskytning = false
     if (ArmStatus) {
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
@@ -197,6 +203,7 @@ basic.forever(function on_forever() {
     } 
 })
 function Launch () { 
+    Oppskytning = false
     if (ArmStatus) {
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
@@ -342,7 +349,8 @@ basic.forever(function on_forever() {
         Launch()
     } 
 })
-function Launch () { 
+function Launch () {
+    Oppskytning = false 
     if (ArmStatus) {
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
@@ -439,6 +447,7 @@ basic.forever(function on_forever() {
     NeoPixels()
 })
 function Launch () { 
+    Oppskytning = false
     if (ArmStatus) {
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
@@ -467,28 +476,180 @@ function Launch () {
 
 ### Kjekt-å-ha: Sende status på Igniter og Arm til ControllerPAD
 
-Videre skal vi finne ut status på ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``. Dette skal legges inn i funksjonen ``||functions: gjenta for alltid||``
+Videre skal vi finne ut status på ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``. Dette skal legges inn i ``||basic: gjenta for alltid||``
 
 - Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variables: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
 - Hvis ``||variables: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
-- Hvis ``||pins: P1||`` er lik 1, skal ``||variables: ArmStatus||`` settes til ``||logic: sann||`` og vi skal sende en ``||radio: radio send tall = 31||`` til ControllerPAD. Ellers skal ``||variables: ArmStatus||`` settes til ``||logic: usann||`` og vi skal sende en ``||radio: radio send tall = 32||`` til ControllerPAD.
+- Inni der vi sjekker om ``||pins: P1||`` er lik 1, skal vi sende sende en ``||radio: radio send tall = 31||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: sann||``. Ellers skal vi sende en ``||radio: radio send tall = 32||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: usann||``.
 
 ```blocks
-function StatusCheck () {
-	SelfStatus = true
+basic.forever(function on_forever() {
+    SelfStatus = true
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        ArmStatus = true
+        radio.sendNumber(21)
+    } else {
+        ArmStatus = false
+        radio.sendNumber(22)
+    }
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        pins.digitalWritePin(DigitalPin.P14, 1)
+        basic.pause(200)
+        if (pins.digitalReadPin(DigitalPin.P2) == 1) {
+            IgniterStatus = true
+            }
+        else {
+            IgniterStatus = false
+            }
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
     if (IgniterStatus) {
         radio.sendNumber(21)
     } else {
         radio.sendNumber(22)
     }
+    if (Oppskytning) {
+        Launch()
+    } 
+    NeoPixels()
+})
+function Launch () { 
+    Oppskytning = false
+    if (ArmStatus) {
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+    }
+}
+let strip: neopixel.Strip = null
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (IgniterStatus) {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatus) {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
+    strip.show()
+}
+```
+
+## Del 3.2:
+
+### Kjekt-å-ha: Tillatt kun oppskytning hvis alle systemene fungerer
+
+For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||logic: Hvis-betingelse||`` som sjekker om alle statusene vår er lik ``||logic: sann||``. Den skal settes inn i ``||basic: gjenta for alltid||``.
+
+Vi skal sjekke: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``.
+
+Hvis alle statusene over er lik ``||logic: sann||``, da skal den nye variabelen ``||variables: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variables: Klar||`` er ``||logic: sann||`` eller ikke.
+
+Vi må også endre i funksjonen ``||functions: Launch ||`` at raketten kun får bli skutt opp hvis ``||variables: Klar||`` er ``||logic: sann||``.
+
+```blocks
+basic.forever(function on_forever() {
+    SelfStatus = true
     if (pins.digitalReadPin(DigitalPin.P1) == 1) {
         ArmStatus = true
-        radio.sendNumber(31)
+        radio.sendNumber(21)
     } else {
         ArmStatus = false
-        radio.sendNumber(32)
+        radio.sendNumber(22)
     }
+    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        pins.digitalWritePin(DigitalPin.P14, 1)
+        basic.pause(200)
+        if (pins.digitalReadPin(DigitalPin.P2) == 1) {
+            IgniterStatus = true
+            }
+        else {
+            IgniterStatus = false
+            }
+        pins.digitalWritePin(DigitalPin.P14, 0)
+    }
+    if (IgniterStatus) {
+        radio.sendNumber(21)
+    } else {
+        radio.sendNumber(22)
+    }
+    if (SelvStatus && LinkStatus && IgniterStatus && ArmStatus) {
+        Klar = true
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
+    } else {
+        Klar = false
+        basic.showLeds(`
+            # . . . #
+            # # . # #
+            # . # . #
+            # . . . #
+            # . . . #
+            `)	
+    }
+    if (Oppskytning) {
+        Launch()
+    } 
     NeoPixels()
+})
+function Launch () { 
+    Oppskytning = false
+    if (Klar) {
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+    }
 }
 let strip: neopixel.Strip = null
 function NeoPixels () {
