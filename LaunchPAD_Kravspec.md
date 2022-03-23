@@ -88,7 +88,7 @@ function Launch () {
 
 ## Må: Del 1.3:
 
-### oppskytningssekvensen
+### Oppskytningssekvensen
 
 Inni ``||functions: Launch ||``:
 
@@ -170,7 +170,7 @@ Bytt veiledning, og fortsett å lage koden til ControllerPAD!
 
 ### Bør: Sette opp lysene på kofferten
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 4 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixels: NeoPixel at pin P0 with 4 leds||``.)
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 4 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixel: NeoPixel at pin P0 with 4 leds||``.)
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 
