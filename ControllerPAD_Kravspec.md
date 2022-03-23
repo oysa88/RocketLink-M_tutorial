@@ -1,5 +1,6 @@
 # ControllerPAD med Kravspec i riktig rekkefølge
 
+### diffs true
 
 ## Del 1: @unplugged
 
