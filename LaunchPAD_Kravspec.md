@@ -61,9 +61,9 @@ basic.forever(function on_forever() {
 
 Raketten skal sendes opp når ``||radio: radio mottar receivedNumber = 42 ||``.
 
-Får å få til dette, må vi lage en ``||logic: hvis-betingelse ||`` inni ``||radio: radio mottar receivedNumber ||``. Her skal vi vi sjekke om ``||variables: receivedNumber||`` = 42.
+Får å få til dette, må vi lage en ``||logic: hvis-betingelse ||`` inni ``||radio: radio mottar receivedNumber ||``. Her skal vi vi sjekke om ``||variables: receivedNumber||`` = 42. Hvis den er det, skal vi sette en ny variable vi kaller ``||variables: Oppskytning||`` til ``||logic: sann||``.
 
-Hvis den er det, skal vi kalle opp den nye funksjonen ``||functions: Launch ||``.
+Så, inne i ``||logic: gjenta for alltid||`` skal vi kalle opp den nye funksjonen ``||functions: Launch ||``, hvis ``||variables: Oppskytning||`` er ``||logic: sann||``.
 
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {

@@ -56,7 +56,7 @@ basic.forever(function on_forever() {
 
 ## Del 1.3:
 
-### Må: Sjekke om Launch-knappen er trykket ned @diffs true
+### Må: Sjekke om Launch-knappen er trykket ned
 
 Lag en ny ``||logic: hvis-betingelse ||`` som sjekker om Launch-button (``||pins: les digitalverdi P11 ||``) er 0. 
 
@@ -80,7 +80,7 @@ function Launch () {
 
 ## Del 1.4:
 
-### Må: Launch-kommando kun ved armering @diffs true
+### Må: Launch-kommando kun ved armering
 
 Launch-kommandoen skal kun få bli sendt hvis ``||variables: ArmStatus ||`` er ``||logic: Sann ||``.
 
@@ -96,7 +96,7 @@ function Launch () {
 
 ## Del 1.5:
 
-### Må: Buzzer som varsler om oppskytning @diffs true
+### Må: Buzzer som varsler om oppskytning
 
 For å si ifra til omgivelsene at systemet er armert, skal vi skru PÅ Buzzer (``||pins: skriv digital til P13 = 1 ||``) når ``||variables: ArmStatus ||`` er ``||logic: sann ||``, og AV når ``||variables: ArmStatus ||`` er ``||logic: usann ||``. 
 
@@ -125,7 +125,7 @@ function Launch () {
 
 ## Del 1.6:
 
-### Må: Rearmere kofferten før ny oppskytning @diffs true
+### Må: Rearmere kofferten før ny oppskytning
 
 Kofferten får ikke skyte opp en ny rakett før den er rearmert. (Armeringsbryteren må skrus AV.)
 
