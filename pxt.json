@@ -1,6 +1,6 @@
 {
     "name": "RocketLink-M Tuorials",
-    "version": "7.0.5",
+    "version": "7.0.6",
     "description": "",
     "dependencies": {
         "core": "*",
