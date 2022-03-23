@@ -501,6 +501,7 @@ Vi skal sende status til ``||variables: IgniterStatus||`` og ``||variables: ArmS
 - ``||logic: Hvis||`` ``||variables: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
 - Inni der vi sjekker om ``||pins: P1||`` er lik 1, skal vi sende en ``||radio: radio send tall = 31||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: sann||``. Ellers skal vi sende en ``||radio: radio send tall = 32||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: usann||``.
 
+
 ```blocks
 basic.forever(function on_forever() {
     SelfStatus = true
@@ -514,8 +515,6 @@ basic.forever(function on_forever() {
     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
         strip.showColor(neopixel.colors(NeoPixelColors.Red))
         pins.digitalWritePin(DigitalPin.P14, 1)
-
-
         basic.pause(200)
         if (pins.digitalReadPin(DigitalPin.P2) == 1) {
             IgniterStatus = true
@@ -702,6 +701,47 @@ function NeoPixels () {
 
 ## Del 3.3:
 
+### Kjekt-å-ha: Forbedre visualisering av Launch
+
+Vis på skjermen til micro:biten når raketten blir skutt opp. Bruk en ``||basic: vis skjerm||`` for å gjøre dette. 
+
+```blocks
+function Launch () { 
+    Oppskytning = false
+    if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+    }
+}
+```
+
+
+## Del 3.4:
+
 ### Kjekt-å-ha: Forbedre visualisering av rearm
 
 For å tydeligere vise at kofferten er låst i rearm, skal vi skru av neopixel-lysene på kofferten.
@@ -711,7 +751,14 @@ Dette gjør vi ved å bruke blokkene ``||neopixel: strip clear||`` og så ``||ne
 ```blocks
 function Launch () { 
     Oppskytning = false
-    if (ArmStatus) {
+    if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
@@ -739,7 +786,7 @@ let strip: neopixel.Strip = null
 ```
 
 
-## Del 3.4:
+## Del 3.5:
 
 ### Kjekt-å-ha: Oppsett og reset av kofferten
 
@@ -762,7 +809,14 @@ function Initialize () {
 }
 function Launch () { 
     Oppskytning = false
-    if (ArmStatus) {
+    if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
         pins.digitalWritePin(DigitalPin.P16, 1)
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
@@ -789,7 +843,7 @@ function Launch () {
 }
 ```
 
-## Del 3.5: 
+## Del 3.6: 
 
 ### Kjekt-å-ha: Initialize funksjon
 
@@ -811,7 +865,7 @@ function Initialize () {
 ```
 
 
-## Del 3.6: 
+## Del 3.7: 
 
 ### Kjekt-å-ha: Initialize - animasjon
 
@@ -863,7 +917,7 @@ function Initialize () {
 }
 ```
 
-## Del 3.7: @unplugged
+## Del 3.8: @unplugged
 
 ### Bytte Tutorial
 

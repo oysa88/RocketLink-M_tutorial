@@ -338,6 +338,7 @@ function NeoPixels () {
     } else {
         strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
     }
+    strip.show()
 }
 basic.forever(function () {
     SelfStatus = true
@@ -403,6 +404,9 @@ Vi mottar status til ``||variables: IgniterStatusLP||`` og ``||variables: ArmSta
 | IgniterStatusLP | 21 | 22 |
 | ArmStatusLP | 31 | 32 |
 
+Inni ``||control: kjør i bakgrunnen||``, legg til at ``||variables: IgniterStatusLP||`` og ``||variables: ArmStatusLP||`` settes til ``||logic: usann||`` hvis ``||input: kjøretid (ms)||`` minus (-) ``||variables: sistSettAktiv||`` er større enn (>) 3x ``||variables: Oppdateringsfrekvens||``.
+
+
 ```blocks
 radio.onReceivedNumber(function (receivedNumber) {
     if (receivedNumber == 11){
@@ -418,6 +422,17 @@ radio.onReceivedNumber(function (receivedNumber) {
         ArmStatusLP = true
     } else if (receivedNumber == 32) {
         ArmStatusLP = false
+    }
+})
+control.inBackground(function () {
+    while (true) {
+        radio.sendNumber(11)
+        if (input.runningTime() - sistSettAktiv > 3 * Oppdateringsfrekvens) {
+            LinkStatus = false
+            IgniterStatusLP = false
+            ArmStatusLP = false
+        }
+    basic.pause(oppdateringsfrekvens)
     }
 })
 ```
@@ -463,6 +478,7 @@ function NeoPixels () {
     } else {
         strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
     }
+    strip.show()
 }
 ```
 
@@ -481,6 +497,8 @@ Vi må også endre i funksjonene ``||functions: Launch||`` og ``||functions: Neo
 
 - I ``||functions: Launch ||`` får raketten kun bli skutt opp hvis ``||variables: Klar||`` er ``||logic: sann||``.
 - I ``||functions: NeoPixels||`` skal neopixel nr. 4 endres med status til variabelen ``||variables: Klar||``.
+
+Sett ``||variables: Klar||`` til ``||logic: usann||`` etter oppskytningen.
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -510,6 +528,7 @@ function NeoPixels () {
     } else {
         strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
     }
+    strip.show()
 }
 basic.forever(function () {
     SelfStatus = true
@@ -548,6 +567,7 @@ basic.forever(function () {
 function Launch () {
     if (Klar) {
         radio.sendNumber(42)
+        Klar = false
         pins.digitalWritePin(DigitalPin.P13, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 0) {
             pins.digitalWritePin(DigitalPin.P8, 1)
@@ -561,20 +581,126 @@ function Launch () {
 
 ## Del 3.4:
 
+### Kjekt-å-ha: Forbedre visualisering av Launch
+
+Vi skal gjøre noen små justeringer i Oppskytningssekvensen:
+
+- Buzzer og LED-lyset i Launch-knappen skal nå skrus PÅ når ``||variables: Klar||`` er ``||logic: sann||``, og AV når den er ``||logic: usann||``. Husk å fjerne buzzer (``||pins: pins P13||``) fra ``||variables: ArmStatus||`` og ``||functions: Launch||``.
+- Vis på skjermen til micro:biten når raketten blir skutt opp. Bruk en ``||basic: vis skjerm||`` for å gjøre dette. 
+
+```blocks
+basic.forever(function () {
+    SelfStatus = true
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        ArmStatus = true
+    } else {
+        ArmStatus = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+        Launch()
+    }
+    if (SelvStatus && LinkStatus && IgniterStatusLP && ArmStatusLP && ArmStatus) {
+        Klar = true
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
+    } else {
+        Klar = false
+        basic.showLeds(`
+            # . . . #
+            # # . # #
+            # . # . #
+            # . . . #
+            # . . . #
+            `)	
+    if (Klar) {
+        pins.digitalWritePin(DigitalPin.P13, 1)
+        pins.digitalWritePin(DigitalPin.P14, 1)
+    } else {
+        pins.digitalWritePin(DigitalPin.P13, 0)
+        pins.digitalWritePin(DigitalPin.P14, 0) 
+    }
+    NeoPixels()
+    basic.pause(100)
+})
+function Launch () {
+    if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        radio.sendNumber(42)
+        Klar = false
+        while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
+        }
+    }
+}
+let strip: neopixel.Strip = null
+function NeoPixels () {
+    if (SelfStatus) {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (LinkStatus) {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (IgniterStatusLP) {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(2, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (ArmStatusLP) {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(3, neopixel.colors(NeoPixelColors.Red))
+    }
+    if (Klar) {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Green))
+    } else {
+        strip.setPixelColor(4, neopixel.colors(NeoPixelColors.Red))
+    }
+    strip.show()
+}
+```
+
+
+## Del 3.5:
+
 ### Kjekt-å-ha: Forbedre visualisering av rearm
 
 For å tydeligere vise at kofferten er låst i rearm, skal vi skru av neopixel-lysene på kofferten.
 
 Dette gjør vi ved å bruke blokkene ``||neopixel: strip clear||`` og så ``||neopixel: strip show||``. Disse skal plasseres rett etter at raketten er skutt opp og før koden går inn i ``||loops: gjenta hvis sann||``.
 
-Vi skal også få skjermen til microbiten til å blinke med å bruke to ``||basic: vis skjerm ||``, som ser forskjellig ut. Disse skal blinke så lenge ``||pins: les digital P1 = 0 ||``. Fjern også ``||basic: pausene||`` inne i ``||loops: gjenta hvis sann||``.
+Vi skal få skjermen til microbiten til å blinke med å bruke to ``||basic: vis skjerm ||``, som ser forskjellig ut. Disse skal blinke så lenge ``||pins: les digital P1 = 0 ||``. Fjern også ``||basic: pausene||`` inne i ``||loops: gjenta hvis sann||``.
 
 ```blocks
 let strip: neopixel.Strip = null
 function Launch () {
     if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
         radio.sendNumber(42)
-        pins.digitalWritePin(DigitalPin.P13, 0)
+        Klar = false
         strip.clear()
         strip.show()
         while (pins.digitalReadPin(DigitalPin.P1) == 0) {
@@ -600,7 +726,7 @@ function Launch () {
 ```
 
 
-## Del 3.5:
+## Del 3.6:
 
 ### Kjekt-å-ha: Oppsett og reset av kofferten
 
@@ -623,8 +749,15 @@ function Initialize () {
 }
 function Launch () {
     if (Klar) {
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
         radio.sendNumber(42)
-        pins.digitalWritePin(DigitalPin.P13, 0)
+        Klar = false
         strip.clear()
         strip.show()
         while (pins.digitalReadPin(DigitalPin.P1) == 0) {
@@ -650,7 +783,7 @@ function Launch () {
 }
 ```
 
-## Del 3.5: 
+## Del 3.7: 
 
 ### Kjekt-å-ha: Initialize funksjon
 
@@ -672,7 +805,7 @@ function Initialize () {
 ```
 
 
-## Del 3.6: 
+## Del 3.8: 
 
 ### Kjekt-å-ha: Initialize - animasjon
 
@@ -724,7 +857,75 @@ function Initialize () {
 }
 ```
 
-## Del 3.7: @unplugged
+## Del 3.9:
+
+### BuzzerBlink-funksjon:
+
+Når raketten skytes opp, skal vi få ``||pins: P13||`` (Buzzer) og ``||pins: P14||`` (Launch Button LED) til å tute og blinke 3 ganger.
+
+Lag en ny funksjon: ``||functions: BuzzerBlink||``. Denne funksjonen skal kalles opp først inne i ``||functions: Launch||`` hvis ``||variables: Klar||`` er ``||logic: sann||``.
+
+Sett ``||pins: P13||`` og ``||pins: P14||`` til HØY (1) og LAV (0) 3 ganger, med 100ms ``||basic: pause||`` mellom hver HØY og LAV.
+
+```blocks
+function BuzzerBlink () {
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 1)
+    pins.digitalWritePin(DigitalPin.P14, 1)
+    basic.pause(100)
+    pins.digitalWritePin(DigitalPin.P13, 0)
+    pins.digitalWritePin(DigitalPin.P14, 0)
+}
+let strip: neopixel.Strip = null
+function Launch () {
+    if (Klar) {
+        BuzzerBlink()
+        basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+        radio.sendNumber(42)
+        Klar = false
+        strip.clear()
+        strip.show()
+        while (pins.digitalReadPin(DigitalPin.P1) == 0) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+    }
+}
+```
+
+
+## Del 3.10: @unplugged
 
 ### Ferdig med Tutorial!
 
