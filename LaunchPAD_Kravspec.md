@@ -187,6 +187,8 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 Øverst i ``||basic: gjenta for alltid||`` skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
 
+Vi skal også legge inn en liten ``||basic: pause||`` på 100ms i bunn av ``||basic: gjenta for alltid||`` for å gi koden litt pusterom.
+
 
 ```blocks
 basic.forever(function on_forever() {
@@ -199,6 +201,7 @@ basic.forever(function on_forever() {
     if (Oppskytning) {
         Launch()
     } 
+    basic.pause(100)
 })
 function Launch () { 
     Oppskytning = false
@@ -346,6 +349,7 @@ basic.forever(function on_forever() {
     if (Oppskytning) {
         Launch()
     } 
+    basic.pause(100)
 })
 function Launch () {
     Oppskytning = false 
@@ -443,6 +447,7 @@ basic.forever(function on_forever() {
         Launch()
     } 
     NeoPixels()
+    basic.pause(100)
 })
 function Launch () { 
     Oppskytning = false
@@ -491,10 +496,9 @@ Sikkerheten og brukervennligheten til rakettkoffertene er ganske bra nå! Men fo
 
 ### Kjekt-å-ha: Sende status på Igniter og Arm til ControllerPAD
 
-Vi skal sende hvilken status ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||`` over til ControllerPAD. Dette skal legges inn i ``||basic: gjenta for alltid||``:
+Vi skal sende status til ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||`` over til ControllerPAD. Dette skal gjøres i ``||basic: gjenta for alltid||``:
 
-- Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variables: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
-- Hvis ``||variables: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
+- ``||logic: Hvis||`` ``||variables: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
 - Inni der vi sjekker om ``||pins: P1||`` er lik 1, skal vi sende en ``||radio: radio send tall = 31||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: sann||``. Ellers skal vi sende en ``||radio: radio send tall = 32||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: usann||``.
 
 ```blocks
@@ -530,6 +534,7 @@ basic.forever(function on_forever() {
         Launch()
     } 
     NeoPixels()
+    basic.pause(100)
 })
 function Launch () { 
     Oppskytning = false
@@ -589,7 +594,7 @@ For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||log
 
 Vi skal sjekke: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``.
 
-Hvis alle statusene over er lik ``||logic: sann||``, da skal den nye variabelen ``||variables: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på skjermen til micro:biten for hvert at tilfellene som ser om ``||variables: Klar||`` er ``||logic: sann||`` eller ikke.
+Hvis alle statusene over er lik ``||logic: sann||``, da skal den nye variabelen ``||variables: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på skjermen til micro:biten for hvert at tilfellene som viser om ``||variables: Klar||`` er ``||logic: sann||`` eller ikke.
 
 Vi må også endre i funksjonen ``||functions: Launch ||`` at raketten kun får bli skutt opp hvis ``||variables: Klar||`` er ``||logic: sann||``.
 
@@ -643,6 +648,7 @@ basic.forever(function on_forever() {
         Launch()
     } 
     NeoPixels()
+    basic.pause(100)
 })
 function Launch () { 
     Oppskytning = false
@@ -743,7 +749,7 @@ Funksjonen skal kjøres hver gang vi skrur på LaunchPAD og hver gang vi rearmer
 
 ``||functions: Initialize||`` sin oppgave er å nullstille rakettkofferten slik at alle systemer stilles tilbake eller skrus av.
 
-Den første er i bunn av blokken: ``||basic: ved start||``.
+``||functions: Initialize||`` skal kalles opp både fra brunn av ``||basic: ved start||`` og i bunn av ``||functions: Launch||`` (nederst inne i ``||logic: hvis-betingelsen||``).
 
 ```blocks
 radio.setGroup(1)
@@ -754,45 +760,44 @@ Initialize()
 function Initialize () {
 	
 }
+function Launch () { 
+    Oppskytning = false
+    if (ArmStatus) {
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        strip.clear()
+        strip.show()
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+        Initialize()
+    }
+}
+let strip: neopixel.Strip = null
 ```
 
-## Del 2.2: 
+## Del 3.5: 
 
 ### Initialize funksjon:
 
-Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||``, ``||variables: ArmStatus||`` og ``||variables: Klar||``.
-
-Disse variablene utfører, og skal settes til:
-
-- ``||variables: SelfStatus||`` sjekker om kofferten er på. Settes til ``||logic: usann||``
-- ``||variables: LinkStatus||`` sjekker om det er kontakt med den andre kofferten. Settes til ``||logic: usann||``
-- ``||variables: IgniterStatus||`` viser om ledningene er riktig koblet til tenneren i raketten. Settes til ``||logic: usann||``
-- ``||variables: ArmStatus||`` sjekker om Arm-knappen er skrudd på. Settes til ``||logic: usann||``
-- ``||variables: Klar||`` sjekker om alle systemene på kofferten er på. Settes til ``||logic: usann||``
-
-| Variables ||||| Status |
-|:---------|||||:------:|
-| SelfStatus ||||| Usann |
-| LinkStatus ||||| Usann |
-| IgniterStatus ||||| Usann |
-| ArmStatus ||||| Usann |
-| Klar ||||| Usann |
-
-```blocks
-function Initialize () {
-	SelfStatus = false
-    LinkStatus = false
-    IgniterStatus = false
-    ArmStatus = false
-    Klar = false
-}
-```
-
-## Del 2.3: 
-
-### Initialize - NeoPixels:
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å sette å sette alle variablene til ``||logic: usann||``: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||``, ``||variables: ArmStatus||`` og ``||variables: Klar||``.
 
 Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
+
 
 ```blocks
 let strip: neopixel.Strip = null
@@ -806,11 +811,12 @@ function Initialize () {
 }
 ```
 
-## Del 2.4: 
+
+## Del 3.6: 
 
 ### Initialize - animasjon:
 
-Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. (Hint: Dette er kun et forslag.)
+Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. (Se hint: Dette er kun et forslag.)
 
 Etter animasjonen skal alle lysene settes til å lyse Rødt (``||neopixel: Rød||``)
 
@@ -857,6 +863,17 @@ function Initialize () {
     basic.pause(200)
 }
 ```
+
+## Del 3.7: @unplugged
+
+### Bytte Tutorial
+
+Gratulerer! Vi er nå ferdige med koden til LaunchPAD!
+
+Bytt veiledning, og fullfør koden til ControllerPAD!
+
+![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
+
 
 
 ```package
