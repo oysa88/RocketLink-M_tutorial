@@ -185,9 +185,7 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 ### Bør: SelfStatus
 
-Øverst i ``||basic: gjenta for alltid||``.
-
-Her skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
+Øverst i ``||basic: gjenta for alltid||`` skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
@@ -472,15 +470,32 @@ function Launch () {
 }
 ```
 
+## Del 2.9:
+
+### Teste Bør-koden til begge koffertene
+
+``||math: Last ned||`` koden til begge koffertene på hver sin micro:bit. Test at alle funksjonene du har laget fungerer som den skal!
+
+
+## Del 3: @unplugged
+
+### Kjekt å ha-krav til rakettkoffertene
+
+Sikkerheten og brukervennligheten til rakettkoffertene er ganske bra nå! Men for å få fullt utbytte av koffertene, skal vi legge til noen få funksjoner til i koden vår.
+
+![Radio-mellom-rakettkoffertene.gif](https://i.postimg.cc/nL4Rtr4R/Radio-mellom-rakettkoffertene.gif)
+
+
+
 ## Del 3.1:
 
 ### Kjekt-å-ha: Sende status på Igniter og Arm til ControllerPAD
 
-Videre skal vi finne ut status på ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``. Dette skal legges inn i ``||basic: gjenta for alltid||``
+Vi skal sende hvilken status ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||`` over til ControllerPAD. Dette skal legges inn i ``||basic: gjenta for alltid||``:
 
 - Lag to ``||logic: Hvis-betingelse||``. Den ene skal sjekke om ``||variables: IgniterStatus||`` er ``||logic: sann||``, mens den andre skal lese av ``||pins: P1||`` (Arm-knappen). 
 - Hvis ``||variables: IgniterStatus||`` er ``||logic: sann||``, skal vi sende en ``||radio: radio send tall = 21||`` til ControllerPAD. Ellers skal vi skal sende en ``||radio: radio send tall = 22||`` til ControllerPAD.
-- Inni der vi sjekker om ``||pins: P1||`` er lik 1, skal vi sende sende en ``||radio: radio send tall = 31||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: sann||``. Ellers skal vi sende en ``||radio: radio send tall = 32||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: usann||``.
+- Inni der vi sjekker om ``||pins: P1||`` er lik 1, skal vi sende en ``||radio: radio send tall = 31||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: sann||``. Ellers skal vi sende en ``||radio: radio send tall = 32||`` til ControllerPAD når ``||variables: ArmStatus||`` er ``||logic: usann||``.
 
 ```blocks
 basic.forever(function on_forever() {
@@ -495,6 +510,8 @@ basic.forever(function on_forever() {
     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
         strip.showColor(neopixel.colors(NeoPixelColors.Red))
         pins.digitalWritePin(DigitalPin.P14, 1)
+
+
         basic.pause(200)
         if (pins.digitalReadPin(DigitalPin.P2) == 1) {
             IgniterStatus = true
@@ -572,7 +589,7 @@ For å sjekke om alle systemene er klare for oppskytning, må vi lage en ``||log
 
 Vi skal sjekke: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``.
 
-Hvis alle statusene over er lik ``||logic: sann||``, da skal den nye variabelen ``||variables: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på hvert at tilfellene for se om ``||variables: Klar||`` er ``||logic: sann||`` eller ikke.
+Hvis alle statusene over er lik ``||logic: sann||``, da skal den nye variabelen ``||variables: Klar||`` settes lik ``||logic: sann||``. Ellers settes lik ``||logic: usann||``. Legg ved et bilde på skjermen til micro:biten for hvert at tilfellene som ser om ``||variables: Klar||`` er ``||logic: sann||`` eller ikke.
 
 Vi må også endre i funksjonen ``||functions: Launch ||`` at raketten kun får bli skutt opp hvis ``||variables: Klar||`` er ``||logic: sann||``.
 
@@ -677,6 +694,169 @@ function NeoPixels () {
 }
 ```
 
+## Del 3.3:
+
+### Forbedre visualisering av rearm
+
+For å tydeligere vise at kofferten er låst i rearm, skal vi skru av neopixel-lysene på kofferten.
+
+Dette gjør vi ved å bruke blokkene ``||neopixel: strip clear||`` og så ``||neopixel: strip show||``. Disse skal plasseres rett etter at raketten er skutt opp og før koden går inn i ``||loops: gjenta hvis sann||``.
+
+```blocks
+function Launch () { 
+    Oppskytning = false
+    if (ArmStatus) {
+        pins.digitalWritePin(DigitalPin.P16, 1)
+        basic.pause(500)
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        strip.clear()
+        strip.show()
+        while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # # # .
+                . # # # .
+                . . . . .
+            `)
+            basic.showLeds(`
+                . . . . .
+                . # # # .
+                . # . # .
+                . # # # .
+                . . . . .
+            `)
+        }
+    }
+}
+let strip: neopixel.Strip = null
+```
+
+
+## Del 3.4:
+
+### Oppsett og reset av kofferten
+
+Vi skal lage en funksjon for kofferten som heter ``||functions: Initialize||``. 
+
+Funksjonen skal kjøres hver gang vi skrur på LaunchPAD og hver gang vi rearmerer kofferten etter en oppskytning. 
+
+``||functions: Initialize||`` sin oppgave er å nullstille rakettkofferten slik at alle systemer stilles tilbake eller skrus av.
+
+Den første er i bunn av blokken: ``||basic: ved start||``.
+
+```blocks
+radio.setGroup(1)
+radio.setTransmitPower(7)
+pins.digitalWritePin(DigitalPin.P15, 1)
+let strip = neopixel.create(DigitalPin.P0, 4, NeoPixelMode.RGB)
+Initialize()
+function Initialize () {
+	
+}
+```
+
+## Del 2.2: 
+
+### Initialize funksjon:
+
+Det første vi må gjøre inne i ``||functions: Initialize||`` er å lage 6 variabler: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||``, ``||variables: ArmStatus||`` og ``||variables: Klar||``.
+
+Disse variablene utfører, og skal settes til:
+
+- ``||variables: SelfStatus||`` sjekker om kofferten er på. Settes til ``||logic: usann||``
+- ``||variables: LinkStatus||`` sjekker om det er kontakt med den andre kofferten. Settes til ``||logic: usann||``
+- ``||variables: IgniterStatus||`` viser om ledningene er riktig koblet til tenneren i raketten. Settes til ``||logic: usann||``
+- ``||variables: ArmStatus||`` sjekker om Arm-knappen er skrudd på. Settes til ``||logic: usann||``
+- ``||variables: Klar||`` sjekker om alle systemene på kofferten er på. Settes til ``||logic: usann||``
+
+| Variables ||||| Status |
+|:---------|||||:------:|
+| SelfStatus ||||| Usann |
+| LinkStatus ||||| Usann |
+| IgniterStatus ||||| Usann |
+| ArmStatus ||||| Usann |
+| Klar ||||| Usann |
+
+```blocks
+function Initialize () {
+	SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Klar = false
+}
+```
+
+## Del 2.3: 
+
+### Initialize - NeoPixels:
+
+Videre inne i ``||functions: Initialize||`` skal vi teste lysene på NeoPixel strip. Sett alle lysene til å lyse lilla (``||neopixel: Purple||``).
+
+```blocks
+let strip: neopixel.Strip = null
+function Initialize () {
+	SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Klar = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple))
+}
+```
+
+## Del 2.4: 
+
+### Initialize - animasjon:
+
+Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. (Hint: Dette er kun et forslag.)
+
+Etter animasjonen skal alle lysene settes til å lyse Rødt (``||neopixel: Rød||``)
+
+Avslutt med en liten ``||basic: pause||`` på 200 ms.
+
+```blocks
+let strip: neopixel.Strip = null
+function Initialize () {
+	SelfStatus = false
+    LinkStatus = false
+    IgniterStatus = false
+    ArmStatus = false
+    Klar = false
+    strip.showColor(neopixel.colors(NeoPixelColors.Purple)) 
+    basic.showLeds(`
+    . . . . .
+    . . . . .
+    . . # . .
+    . . . . .
+    . . . . .
+    `)
+    basic.showLeds(`
+    . . . . .
+    . # # # .
+    . # . # .
+    . # # # .
+    . . . . .
+    `)
+    basic.showLeds(`
+    # # # # #
+    # . . . #
+    # . . . #
+    # . . . #
+    # # # # #
+    `)
+    basic.showLeds(`
+    # . . . #
+    # # . # #
+    # . # . #
+    # . . . #
+    # . . . #
+    `)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    basic.pause(200)
+}
+```
 
 
 ```package

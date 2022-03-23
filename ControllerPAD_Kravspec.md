@@ -159,9 +159,9 @@ Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
 ![Launch-PAD.jpg](https://i.postimg.cc/Sxhw0Mck/Launch-PAD.jpg)
 
 
-## Del 2:
+## Del 2: @unplugged
 
-### Bør-krav til LaunchPAD
+### Bør-krav til koffertene
 
 Raketten vil nå kunne bli skutt opp, men for å øke sikkerheten og brukervennligheten til rakettkoffertene, skal vi legge til noen flere funksjoner i koden vår.
 
@@ -174,7 +174,7 @@ Raketten vil nå kunne bli skutt opp, men for å øke sikkerheten og brukervennl
 
 Inni ``||basic: ved start||``:
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 5 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixels: NeoPixel at pin P0 with 5 leds||``.)
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 5 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixel: NeoPixel at pin P0 with 5 leds||``.)
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 
@@ -189,13 +189,12 @@ pins.digitalWritePin(DigitalPin.P15, 1)
 
 ### Bør: SelfStatus
 
-Øverst i ``||basic: gjenta for alltid||``.
-
-Her skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
+Øverst i ``||basic: gjenta for alltid||`` skal vi sette en ny variabel ``||variables: SelfStatus||`` til ``||logic: sann||``. (Kofferten er jo på...)
 
 
 ```blocks
 basic.forever(function on_forever() {
+    SelfStatus = true
     if (pins.digitalReadPin(DigitalPin.P1) == 0) {
         ArmStatus = true
         pins.digitalWritePin(DigitalPin.P13, 1)
@@ -252,7 +251,7 @@ let Oppdateringsfrekvens = 200
 
 Lag en ny variabel: ``||variables: sistSettAktiv||``. 
 
-Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``,sett ``||variables: LinkStatus||`` til ``||logic: sann||`` og ``||variables: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
+Inni en ``||radio:når radio mottar receivedNumber||``: Hver gang vi mottar ``||radio: receivedNumber = 11||``, sett ``||variables: LinkStatus||`` til ``||logic: sann||`` og ``||variables: sistSettAktiv||`` til ``||input: kjøretid (ms)||``. 
 
 I en micro:bit, kjører det en intern klokke som heter ``||input: kjøretid (ms)||``. Ved å sette ``||variables: sistSettAktiv||`` lik ``||input: kjøretid (ms)||`` ved gitte intervaller, kan vi lett se om tidsforskjellen mellom ``||variables: sistSettAktiv||`` og ``||input: kjøretid (ms)||`` blir større enn 3x gitt tidsinterval.
 
@@ -363,6 +362,16 @@ function Launch () {
     }
 }
 ```
+
+## Del 3: @unplugged
+
+### Bytte Tutorial
+
+Gratulerer! Vi er nå ferdige med å lage Bør-koden på ControllerPAD!
+
+Bytt veiledning, og lage bør-koden til LaunchPAD-kofferten!
+
+![Launch-PAD.jpg](https://i.postimg.cc/Sxhw0Mck/Launch-PAD.jpg)
 
 
 
