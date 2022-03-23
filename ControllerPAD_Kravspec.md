@@ -159,12 +159,22 @@ Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
 ![Launch-PAD.jpg](https://i.postimg.cc/Sxhw0Mck/Launch-PAD.jpg)
 
 
+## Del 2:
+
+### Bør-krav til LaunchPAD
+
+Raketten vil nå kunne bli skutt opp, men for å øke sikkerheten og brukervennligheten til rakettkoffertene, skal vi legge til noen flere funksjoner i koden vår.
+
+![Radio-mellom-rakettkoffertene.gif](https://i.postimg.cc/nL4Rtr4R/Radio-mellom-rakettkoffertene.gif)
+
 
 ## Del 2.1:
 
 ### Bør: Sette opp lysene på kofferten
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 5 NeoPixels på ``||pins: digital pin P0||``.
+Inni ``||basic: ved start||``:
+
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 5 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixels: NeoPixel at pin P0 with 5 leds||``.)
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 

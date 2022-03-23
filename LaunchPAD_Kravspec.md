@@ -115,7 +115,7 @@ function Launch () {
 
 ## Del 1.4:
 
-### Må: Rearmere kofferten før ny oppskytning @diffs true
+### Må: Rearmere kofferten før ny oppskytning
 
 Kofferten får ikke skyte opp en ny rakett før den er rearmert. (Armeringsbryteren må skrus AV.)
 
@@ -159,9 +159,9 @@ function Launch () {
 
 ### Bytte Tutorial
 
-Gratulerer! Vi er nå ferdige med å lage MÅ-koden på ControllerPAD!
+Gratulerer! Vi er nå ferdige med å lage MÅ-koden på begge koffertene!
 
-Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
+Bytt veiledning, og fortsett å lage koden til ControllerPAD!
 
 ![Controller-PAD.jpg](https://i.postimg.cc/VLM3HRrK/Controller-PAD.jpg)
 
@@ -170,7 +170,7 @@ Bytt veiledning, og start å lage koden til LaunchPAD-kofferten!
 
 ### Bør: Sette opp lysene på kofferten
 
-For å vise status på systemene på kofferten, bruker vi NeoPixels. Det skal brukes 4 NeoPixels på ``||pins: digital pin P0||``.
+For å vise status på systemene på kofferten, bruker vi NeoPixels. Det er koblet til 4 NeoPixels på ``||pins: digital pin P0||``. (I menyen ``||neopixel: Neopixel||`` finner du ``||variables: sett strip til||`` ``||neopixels: NeoPixel at pin P0 with 4 leds||``.)
 
 Skriv også at ``||pins: digital pin P15 = 1||``. Dette er lyset på Status Check-knappen på kofferten.
 
