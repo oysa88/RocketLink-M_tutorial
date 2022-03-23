@@ -224,7 +224,7 @@ function Launch () {
 
 ## Del 2.3: @unplugged
 
-### Sjekke Linkstatus mellom rakettkoffertene
+### Bør: Sjekke Linkstatus mellom rakettkoffertene
 
 For å kunne sjekke link mellom koffertene må bruke noe som kalles for «active sensing». 
 
@@ -235,7 +235,7 @@ Begge koffertene sender en radiomelding mellom seg med gitte intervaller som sie
 
 ## Del 2.4: 
 
-### Lage en oppdateringsfrekvens
+### Bør: Lage en oppdateringsfrekvens
 
 Lag en variabel som du kaller ``||variables: Oppdateringsfrekvens||``. Sett den inn under  ``||basic: ved start||``, og la den være 200ms.
 
@@ -424,7 +424,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 
 ## Del 3.2:
 
-### Oppdatere NeoPixels for ``||variables: IgniterStatusLP||`` og ``||variables: ArmStatusLP||``
+### Kjekt-å-ha: Oppdatere NeoPixels for ``||variables: IgniterStatusLP||`` og ``||variables: ArmStatusLP||``
 
 Nå som vi kan motta info om status til ``||variables: IgniterStatusLP||`` og ``||variables: ArmStatusLP||`` fra LaunchPAD, skal vi vise disse statusene på NeoPixels-stripen på kofferten.
 
@@ -561,7 +561,7 @@ function Launch () {
 
 ## Del 3.4:
 
-### Forbedre visualisering av rearm
+### Kjekt-å-ha: Forbedre visualisering av rearm
 
 For å tydeligere vise at kofferten er låst i rearm, skal vi skru av neopixel-lysene på kofferten.
 
@@ -602,7 +602,7 @@ function Launch () {
 
 ## Del 3.5:
 
-### Oppsett og reset av kofferten
+### Kjekt-å-ha: Oppsett og reset av kofferten
 
 Vi skal lage en funksjon for kofferten som heter ``||functions: Initialize||``. 
 
@@ -648,12 +648,11 @@ function Launch () {
         Initialize()
     }
 }
-let strip: neopixel.Strip = null
 ```
 
 ## Del 3.5: 
 
-### Initialize funksjon:
+### Kjekt-å-ha: Initialize funksjon
 
 Det første vi må gjøre inne i ``||functions: Initialize||`` er å sette å sette alle variablene til ``||logic: usann||``: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatusLP||``, ``||variables: ArmStatusLP||``, ``||variables: ArmStatus||`` og ``||variables: Klar||``.
 
@@ -675,7 +674,7 @@ function Initialize () {
 
 ## Del 3.6: 
 
-### Initialize - animasjon:
+### Kjekt-å-ha: Initialize - animasjon
 
 Vi lager en liten animasjon på skjermen til micro:bit under oppstartsekvensen. Du kan velge selv hvordan den skal se ut. (Se hint: Dette er kun et forslag.)
 
