@@ -4,7 +4,7 @@
 
 ## Del 1: @unplugged
 
-### Programmere LaunchPAD @unplugged
+### Programmere LaunchPAD
 
 I denne veiledningen skal vi gå igjennom hvordan man programmerer LaunchPAD-kofferten til RocketLink oppskytningssystem. 
 
