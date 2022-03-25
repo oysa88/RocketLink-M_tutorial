@@ -1,4 +1,4 @@
-# ControllerPAD med Kravspec i riktig rekkefølge
+# ControllerPAD
 
 ### diffs true
 

@@ -1,4 +1,4 @@
-# LaunchPAD med Kravspec i riktig rekkefølge
+# LaunchPAD
 
 ### @diffs true
 
