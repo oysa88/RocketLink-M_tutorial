@@ -119,7 +119,10 @@ function Launch () {
 
 Kofferten får ikke skyte opp en ny rakett før den er rearmert. (Armeringsbryteren må skrus AV.)
 
-Så for å "låse" kofferten etter at Launch-kommandoen er sendt, bruk en ``||loops: gjenta hvis sann ||``. Bruk to ``||basic: vis skjerm ||``, som ser forskjellig ut, til å blinke så lenge ``||pins: les digital P1 = 1 ||``.
+Så for å "låse" kofferten etter at Launch-kommandoen er sendt, bruk en ``||loops: gjenta hvis sann ||``, og sett rearm-LED ``||pins: skriv digital til P8 ||`` til å blinke så lenge ``||pins: les digital P1 = 0 ||``.
+
+Bruk en ``||basic: pause ||`` på 500 ms mellom hver gang ``||pins: P8 ||`` er 1 og 0.
+
 
 ```blocks
 function Launch () { 
@@ -129,20 +132,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -210,20 +203,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -358,20 +341,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -456,20 +429,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -542,20 +505,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -656,20 +609,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }
@@ -748,6 +691,8 @@ For å tydeligere vise at kofferten er låst i rearm, skal vi skru av neopixel-l
 
 Dette gjør vi ved å bruke blokkene ``||neopixel: strip clear||`` og så ``||neopixel: strip show||``. Disse skal plasseres rett etter at raketten er skutt opp og før koden går inn i ``||loops: gjenta hvis sann||``.
 
+Vi skal også få skjermen til microbiten til å blinke med å bruke to ``||basic: vis skjerm ||``, som ser forskjellig ut. Disse skal blinke så lenge ``||pins: les digital P1 = 1 ||``. Fjern også ``||basic: pausene||`` inne i ``||loops: gjenta hvis sann||``.
+
 ```blocks
 function Launch () { 
     Oppskytning = false
@@ -765,19 +710,21 @@ function Launch () {
         strip.clear()
         strip.show()
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
             basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
             `)
+            pins.digitalWritePin(DigitalPin.P8, 0)
             basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
             `)
         }
     }
@@ -823,19 +770,21 @@ function Launch () {
         strip.clear()
         strip.show()
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
+            pins.digitalWritePin(DigitalPin.P8, 1)
             basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
+            . . . . .
+            . # # # .
+            . # # # .
+            . # # # .
+            . . . . .
             `)
+            pins.digitalWritePin(DigitalPin.P8, 0)
             basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
+            . . . . .
+            . # # # .
+            . # . # .
+            . # # # .
+            . . . . .
             `)
         }
         Initialize()
