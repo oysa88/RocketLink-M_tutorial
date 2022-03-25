@@ -358,7 +358,7 @@ Vi skal bruke en ny funksjon, ``||functions: NeoPixels||``, for å vise hvilken 
 
 Vi skal inidividuelt sjekke opp variablene: ``||variables: SelfStatus||``, ``||variables: LinkStatus||``, ``||variables: IgniterStatus||`` og ``||variables: ArmStatus||``.
 
-Lag 4 ``||logic: Hvis-betingelser||`` med ``||logic: Ellers hvis||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
+Lag 4 ``||logic: Hvis-betingelser||`` med ``||logic: ellers||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
 
 Avslutt med å vise lysene: ``||neopixel: show||``
 
@@ -663,20 +663,10 @@ function Launch () {
         basic.pause(500)
         pins.digitalWritePin(DigitalPin.P16, 0)
         while (pins.digitalReadPin(DigitalPin.P1) == 1) {
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # # # .
-                . # # # .
-                . . . . .
-            `)
-            basic.showLeds(`
-                . . . . .
-                . # # # .
-                . # . # .
-                . # # # .
-                . . . . .
-            `)
+            pins.digitalWritePin(DigitalPin.P8, 1)
+            basic.pause(500)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            basic.pause(500)
         }
     }
 }

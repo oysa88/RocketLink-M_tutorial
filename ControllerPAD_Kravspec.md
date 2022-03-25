@@ -308,7 +308,7 @@ Vi skal bruke en ny funksjon, ``||functions: NeoPixels||``, for å vise hvilken 
 
 Vi skal inidividuelt sjekke opp variablene: ``||variables: SelfStatus||``, ``||variables: LinkStatus||`` og ``||variables: ArmStatus||``.
 
-Lag 3 ``||logic: Hvis-betingelser||`` med ``||logic: Ellers hvis||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
+Lag 3 ``||logic: Hvis-betingelser||`` med ``||logic: ellers||``, en for hver variabel. Hvis den er ``||logic: sann||``, skal Neopixel settes til grønn, ellers skal den være rød.
 
 Avslutt med å vise lysene: ``||neopixel: show||``
 
@@ -617,7 +617,8 @@ basic.forever(function () {
             # . # . #
             # . . . #
             # . . . #
-            `)	
+            `)
+    }	
     if (Klar) {
         pins.digitalWritePin(DigitalPin.P13, 1)
         pins.digitalWritePin(DigitalPin.P14, 1)
@@ -798,7 +799,8 @@ let strip: neopixel.Strip = null
 function Initialize () {
 	SelfStatus = false
     LinkStatus = false
-    IgniterStatus = false
+    IgniterStatusLP = false
+    ArmStatusLP = false
     ArmStatus = false
     Klar = false
     strip.showColor(neopixel.colors(NeoPixelColors.Purple))
